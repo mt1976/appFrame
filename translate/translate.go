@@ -9,7 +9,7 @@ import (
 var TRANSLATIONS map[string]string
 
 func init() {
-	TRANSLATIONS, _ = fio.GetProperties("translations")
+	TRANSLATIONS, _ = fio.GetProperties("translate.dat")
 }
 
 func Get(in string) string {
