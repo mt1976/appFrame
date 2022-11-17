@@ -1,4 +1,4 @@
-module github.com/mt1976/AppFrame
+module github.com/mt1976/appFrame
 
 go 1.19
 
