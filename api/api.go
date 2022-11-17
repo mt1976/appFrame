@@ -1,4 +1,4 @@
-package AppFrame
+package api
 
 import (
 	"fmt"
