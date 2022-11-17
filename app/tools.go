@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	logs "github.com/mt1976/AppFrame/logs"
+	logs "github.com/mt1976/appFrame/logs"
 )
 
 // SnoozeFor snoozes the application for a given amount of time

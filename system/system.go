@@ -12,8 +12,8 @@ import (
 	"github.com/dustin/go-humanize"
 	"github.com/jaypipes/ghw"
 	gInfo "github.com/matishsiao/goInfo"
-	logs "github.com/mt1976/AppFrame/logs"
-	txt "github.com/mt1976/AppFrame/translate"
+	logs "github.com/mt1976/appFrame/logs"
+	txt "github.com/mt1976/appFrame/translate"
 	"github.com/shirou/gopsutil/host"
 	"github.com/shirou/gopsutil/mem"
 )

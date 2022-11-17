@@ -7,7 +7,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	logs "github.com/mt1976/AppFrame/logs"
+	logs "github.com/mt1976/appFrame/logs"
 )
 
 const (

@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/leekchan/accounting"
-	logs "github.com/mt1976/AppFrame/logs"
+	logs "github.com/mt1976/appFrame/logs"
 )
 
 func AbbreviationsToInt(str string) int {

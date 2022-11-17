@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	logs "github.com/mt1976/AppFrame/logs"
+	logs "github.com/mt1976/appFrame/logs"
 )
 
 // GetURLparam returns a selected parmeter value from the a given URI

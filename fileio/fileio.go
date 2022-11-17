@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/jimlawless/cfg"
-	logs "github.com/mt1976/AppFrame/logs"
+	logs "github.com/mt1976/appFrame/logs"
 )
 
 // FileExists returns true if the specified file existing on the filesystem

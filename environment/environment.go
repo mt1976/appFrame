@@ -4,10 +4,10 @@ import (
 	"os"
 	"strings"
 
-	fio "github.com/mt1976/AppFrame/fileio"
-	logs "github.com/mt1976/AppFrame/logs"
-	str "github.com/mt1976/AppFrame/strings"
-	sys "github.com/mt1976/AppFrame/system"
+	fio "github.com/mt1976/appFrame/fileio"
+	logs "github.com/mt1976/appFrame/logs"
+	str "github.com/mt1976/appFrame/strings"
+	sys "github.com/mt1976/appFrame/system"
 	"github.com/spf13/viper"
 )
 

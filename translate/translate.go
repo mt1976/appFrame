@@ -1,8 +1,8 @@
 package translate
 
 import (
-	fio "github.com/mt1976/AppFrame/fileio"
-	str "github.com/mt1976/AppFrame/strings"
+	fio "github.com/mt1976/appFrame/fileio"
+	str "github.com/mt1976/appFrame/strings"
 )
 
 // Contains Nothing

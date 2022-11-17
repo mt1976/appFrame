@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/gregdel/pushover"
-	env "github.com/mt1976/AppFrame/environment"
-	logs "github.com/mt1976/AppFrame/logs"
+	env "github.com/mt1976/appFrame/environment"
+	logs "github.com/mt1976/appFrame/logs"
 	"github.com/spf13/viper"
 )
 
