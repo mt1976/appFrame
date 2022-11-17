@@ -1,18 +1,19 @@
-package common
+package app
 
 import (
 	"fmt"
-	"log"
 	"math/rand"
 	"runtime"
 	"strconv"
 	"time"
+
+	logs "github.com/mt1976/AppFrame/logs"
 )
 
 // SnoozeFor snoozes the application for a given amount of time
 func SnoozeFor(inPollingInterval string) {
 	pollingInterval, _ := strconv.Atoi(inPollingInterval)
-	log.Printf("Snoooze... Zzzzzz.... %d seconds...", pollingInterval)
+	logs.Printf("Snoooze... Zzzzzz.... %d seconds...", pollingInterval)
 	time.Sleep(time.Duration(pollingInterval) * time.Second)
 }
 
