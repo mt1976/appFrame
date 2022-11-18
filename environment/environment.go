@@ -19,7 +19,7 @@ type environment struct {
 	appName                string `mapstructure:"appName"`
 	appVersion             string `mapstructure:"appVersion"`
 	appURI                 string `mapstructure:"appURI"`
-	appPORT                string `mapstructure:"appPORT"`
+	AppPORT                string `mapstructure:"appPORT"`
 	appPROTOCOL            string `mapstructure:"appPROTOCOL"`
 	appGlyph               string `mapstructure:"appGLYPH"`
 	appGlyphColor          string `mapstructure:"appGLYPHCOLOR"`

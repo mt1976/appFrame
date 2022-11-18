@@ -54,7 +54,7 @@ func HostName() string {
 
 // Return Application HTTP Port
 func ApplicationHTTPPort() string {
-	return Application.appPORT
+	return Application.AppPORT
 }
 
 func (obj environment) DockerURI() string {
@@ -82,7 +82,7 @@ func (obj environment) URI() string {
 }
 
 func Port() string {
-	return Application.appPORT
+	return Application.AppPORT
 }
 
 func (obj environment) Protocol() string {
