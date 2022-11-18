@@ -22,7 +22,7 @@ func init() {
 //TODO - Add Reload Function when the re-load button is pressed.
 
 // GetEnvironment returns the environment variables
-func getEnvironment() (env Environment, err error) {
+func getEnvironment() (env environment, err error) {
 	//err := errors.New("")
 	pwd, _ := os.Getwd()
 	//env := Environment{}
@@ -48,16 +48,16 @@ func getEnvironment() (env Environment, err error) {
 	err = viper.ReadInConfig()
 	if err != nil {
 		xlogs.Fatal(err)
-		return Environment{}, err
+		return environment{}, err
 	}
 
 	err = viper.Unmarshal(&env)
 	if err != nil {
 		xlogs.Fatal(err)
-		return Environment{}, err
+		return environment{}, err
 	}
-	if env.AdditionalServices {
-		env.AdditionalServicesList = strings.Split(viper.GetString("additionalServicesList"), ",")
+	if env.AdditionalServices() {
+		env.additionalServicesList = strings.Split(viper.GetString("additionalServicesList"), ",")
 	}
 
 	//spew.Dump(env)
@@ -130,7 +130,7 @@ func refresh() {
 
 func debug() {
 	xlogs.WithFields(xlogs.Fields{"NAME": Application.AppName, "VERSION": Application.AppVersion}).Info(xtl.Get("Application"))
-	xlogs.WithFields(xlogs.Fields{"URI": Application.DockerURI, "PORT": Application.DockerPORT, "PROTOCOL": Application.DockerPROTOCOL}).Info(xtl.Get("Container"))
+	xlogs.WithFields(xlogs.Fields{"URI": Application.dockerURI, "PORT": Application.DockerPORT, "PROTOCOL": Application.DockerPROTOCOL}).Info(xtl.Get("Container"))
 	xlogs.WithFields(xlogs.Fields{"URI": Application.AppURI, "PORT": Application.AppPORT, "PROTOCOL": Application.AppPROTOCOL}).Info(xtl.Get("Application"))
 	if xsys.IsRunningInDockerContainer() {
 		xlogs.WithFields(xlogs.Fields{"DOCKER": "true"}).Info(xtl.Get("Runtime"))
