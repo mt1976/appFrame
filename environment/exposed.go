@@ -44,7 +44,7 @@ func GetExtra(orig string, inName string, what string) string {
 
 // Return AppName
 func ApplicationName() string {
-	return Application.appName
+	return Application.AppName
 }
 
 // Return HostName
@@ -57,66 +57,66 @@ func ApplicationHTTPPort() string {
 	return Application.AppPORT
 }
 
-func (obj environment) DockerURI() string {
-	return obj.dockerURI
+func DockerURI() string {
+	return Application.DockerURI
 }
 
-func (obj environment) DockerPort() string {
-	return obj.dockerPORT
+func DockerPort() string {
+	return Application.DockerPORT
 }
 
-func (obj environment) DockerProtocol() string {
-	return obj.dockerPROTOCOL
+func DockerProtocol() string {
+	return Application.DockerPROTOCOL
 }
 
-func (obj environment) Name() string {
-	return obj.appName
+func Name() string {
+	return Application.AppName
 }
 
-func (obj environment) Version() string {
-	return obj.appVersion
+func Version() string {
+	return Application.AppVersion
 }
 
-func (obj environment) URI() string {
-	return obj.appURI
+func URI() string {
+	return Application.AppURI
 }
 
 func Port() string {
 	return Application.AppPORT
 }
 
-func (obj environment) Protocol() string {
-	return obj.appPROTOCOL
+func Protocol() string {
+	return Application.AppPROTOCOL
 }
 
-func (obj environment) Glyph() string {
-	return obj.appGlyph
+func Glyph() string {
+	return Application.AppGlyph
 }
 
-func (obj environment) GlyphColor() string {
-	return obj.appGlyphColor
+func GlyphColor() string {
+	return Application.AppGlyphColor
 }
 
-func (obj environment) UserName() string {
-	return obj.userName
+func UserName() string {
+	return Application.UserName
 }
 
-func (obj environment) UserPassword() string {
-	return obj.userPassword
+func UserPassword() string {
+	return Application.UserPassword
 }
 
-func (obj environment) UserSecret() string {
-	return obj.userSecret
+func UserSecret() string {
+	return Application.UserSecret
 }
 
-func (obj environment) Template() string {
-	return obj.appTemplate
+func Template() string {
+	return Application.AppTemplate
 }
 
-func (obj environment) AdditionalServices() bool {
-	return obj.additionalServices
+func AdditionalServices() bool {
+	return Application.AdditionalServices
 }
 
-func (obj environment) AdditionalServicesList() []string {
-	return obj.additionalServicesList
+func AdditionalServicesList() []string {
+	return Application.AdditionalServicesList
 }

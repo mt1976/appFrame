@@ -13,22 +13,22 @@ import (
 
 // Contains Basic Application environment Information
 type environment struct {
-	dockerURI              string `mapstructure:"dockerURI"`
-	dockerPORT             string `mapstructure:"dockerPORT"`
-	dockerPROTOCOL         string `mapstructure:"dockerPROTOCOL"`
-	appName                string `mapstructure:"appName"`
-	appVersion             string `mapstructure:"appVersion"`
-	appURI                 string `mapstructure:"appURI"`
+	DockerURI              string `mapstructure:"dockerURI"`
+	DockerPORT             string `mapstructure:"dockerPORT"`
+	DockerPROTOCOL         string `mapstructure:"dockerPROTOCOL"`
+	AppName                string `mapstructure:"appName"`
+	AppVersion             string `mapstructure:"appVersion"`
+	AppURI                 string `mapstructure:"appURI"`
 	AppPORT                string `mapstructure:"appPORT"`
-	appPROTOCOL            string `mapstructure:"appPROTOCOL"`
-	appGlyph               string `mapstructure:"appGLYPH"`
-	appGlyphColor          string `mapstructure:"appGLYPHCOLOR"`
-	userName               string `mapstructure:"userName"`
-	userPassword           string `mapstructure:"userPassword"`
-	userSecret             string `mapstructure:"userSecret"`
-	appTemplate            string `mapstructure:"appTemplate"`
-	additionalServices     bool   `mapstructure:"additionalServices"`
-	additionalServicesList []string
+	AppPROTOCOL            string `mapstructure:"appPROTOCOL"`
+	AppGlyph               string `mapstructure:"appGLYPH"`
+	AppGlyphColor          string `mapstructure:"appGLYPHCOLOR"`
+	UserName               string `mapstructure:"userName"`
+	UserPassword           string `mapstructure:"userPassword"`
+	UserSecret             string `mapstructure:"userSecret"`
+	AppTemplate            string `mapstructure:"appTemplate"`
+	AdditionalServices     bool   `mapstructure:"additionalServices"`
+	AdditionalServicesList []string
 }
 
 // PATH: application\environment.go
@@ -76,8 +76,8 @@ func getEnvironment() (env environment, err error) {
 		xlogs.Fatal(err)
 		return environment{}, err
 	}
-	if env.AdditionalServices() {
-		env.additionalServicesList = strings.Split(viper.GetString("additionalServicesList"), ",")
+	if env.AdditionalServices {
+		env.AdditionalServicesList = strings.Split(viper.GetString("additionalServicesList"), ",")
 	}
 
 	//spew.Dump(env)
@@ -149,9 +149,9 @@ func refresh() {
 }
 
 func debug() {
-	xlogs.WithFields(xlogs.Fields{"NAME": Application.Name(), "VERSION": Application.Version()}).Info(xtl.Get("Application"))
-	xlogs.WithFields(xlogs.Fields{"URI": Application.DockerURI(), "PORT": Application.DockerPort(), "PROTOCOL": Application.DockerProtocol()}).Info(xtl.Get("Container"))
-	xlogs.WithFields(xlogs.Fields{"URI": Application.URI(), "PORT": Port(), "PROTOCOL": Application.Protocol()}).Info(xtl.Get("Application"))
+	xlogs.WithFields(xlogs.Fields{"NAME": Name(), "VERSION": Version()}).Info(xtl.Get("Application"))
+	xlogs.WithFields(xlogs.Fields{"URI": DockerURI(), "PORT": DockerPort(), "PROTOCOL": DockerProtocol()}).Info(xtl.Get("Container"))
+	xlogs.WithFields(xlogs.Fields{"URI": URI(), "PORT": Port(), "PROTOCOL": Protocol()}).Info(xtl.Get("Application"))
 	if xsys.IsRunningInDockerContainer() {
 		xlogs.WithFields(xlogs.Fields{"DOCKER": "true"}).Info(xtl.Get("Runtime"))
 	} else {
