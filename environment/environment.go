@@ -11,6 +11,26 @@ import (
 	"github.com/spf13/viper"
 )
 
+// Contains Basic Application environment Information
+type environment struct {
+	dockerURI              string `mapstructure:"dockerURI"`
+	dockerPORT             string `mapstructure:"dockerPORT"`
+	dockerPROTOCOL         string `mapstructure:"dockerPROTOCOL"`
+	appName                string `mapstructure:"appName"`
+	appVersion             string `mapstructure:"appVersion"`
+	appURI                 string `mapstructure:"appURI"`
+	appPORT                string `mapstructure:"appPORT"`
+	appPROTOCOL            string `mapstructure:"appPROTOCOL"`
+	appGlyph               string `mapstructure:"appGLYPH"`
+	appGlyphColor          string `mapstructure:"appGLYPHCOLOR"`
+	userName               string `mapstructure:"userName"`
+	userPassword           string `mapstructure:"userPassword"`
+	userSecret             string `mapstructure:"userSecret"`
+	appTemplate            string `mapstructure:"appTemplate"`
+	additionalServices     bool   `mapstructure:"additionalServices"`
+	additionalServicesList []string
+}
+
 // PATH: application\environment.go
 // Language: go
 
@@ -129,9 +149,9 @@ func refresh() {
 }
 
 func debug() {
-	xlogs.WithFields(xlogs.Fields{"NAME": Application.AppName, "VERSION": Application.AppVersion}).Info(xtl.Get("Application"))
-	xlogs.WithFields(xlogs.Fields{"URI": Application.dockerURI, "PORT": Application.DockerPORT, "PROTOCOL": Application.DockerPROTOCOL}).Info(xtl.Get("Container"))
-	xlogs.WithFields(xlogs.Fields{"URI": Application.AppURI, "PORT": Application.AppPORT, "PROTOCOL": Application.AppPROTOCOL}).Info(xtl.Get("Application"))
+	xlogs.WithFields(xlogs.Fields{"NAME": Application.Name(), "VERSION": Application.Version()}).Info(xtl.Get("Application"))
+	xlogs.WithFields(xlogs.Fields{"URI": Application.DockerURI(), "PORT": Application.DockerPort(), "PROTOCOL": Application.DockerProtocol()}).Info(xtl.Get("Container"))
+	xlogs.WithFields(xlogs.Fields{"URI": Application.URI(), "PORT": Application.Port(), "PROTOCOL": Application.Protocol()}).Info(xtl.Get("Application"))
 	if xsys.IsRunningInDockerContainer() {
 		xlogs.WithFields(xlogs.Fields{"DOCKER": "true"}).Info(xtl.Get("Runtime"))
 	} else {

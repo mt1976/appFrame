@@ -7,26 +7,6 @@ import (
 // PATH: application\environment.go
 // Language: go
 
-// Contains Basic Application environment Information
-type environment struct {
-	dockerURI              string `mapstructure:"dockerURI"`
-	dockerPORT             string `mapstructure:"dockerPORT"`
-	dockerPROTOCOL         string `mapstructure:"dockerPROTOCOL"`
-	appName                string `mapstructure:"appName"`
-	appVersion             string `mapstructure:"appVersion"`
-	appURI                 string `mapstructure:"appURI"`
-	appPORT                string `mapstructure:"appPORT"`
-	appPROTOCOL            string `mapstructure:"appPROTOCOL"`
-	appGlyph               string `mapstructure:"appGLYPH"`
-	appGlyphColor          string `mapstructure:"appGLYPHCOLOR"`
-	userName               string `mapstructure:"userName"`
-	userPassword           string `mapstructure:"userPassword"`
-	userSecret             string `mapstructure:"userSecret"`
-	appTemplate            string `mapstructure:"appTemplate"`
-	additionalServices     bool   `mapstructure:"additionalServices"`
-	additionalServicesList []string
-}
-
 // Contains Basic Application Environment Information
 var Application environment
 
@@ -64,7 +44,7 @@ func GetExtra(orig string, inName string, what string) string {
 
 // Return AppName
 func ApplicationName() string {
-	return Application.AppName()
+	return Application.Name()
 }
 
 // Return HostName
@@ -81,39 +61,39 @@ func (obj environment) DockerURI() string {
 	return obj.dockerURI
 }
 
-func (obj environment) DockerPORT() string {
+func (obj environment) DockerPort() string {
 	return obj.dockerPORT
 }
 
-func (obj environment) DockerPROTOCOL() string {
+func (obj environment) DockerProtocol() string {
 	return obj.dockerPROTOCOL
 }
 
-func (obj environment) AppName() string {
+func (obj environment) Name() string {
 	return obj.appName
 }
 
-func (obj environment) AppVersion() string {
+func (obj environment) Version() string {
 	return obj.appVersion
 }
 
-func (obj environment) AppURI() string {
+func (obj environment) URI() string {
 	return obj.appURI
 }
 
-func (obj environment) AppPORT() string {
+func (obj environment) Port() string {
 	return obj.appPORT
 }
 
-func (obj environment) AppPROTOCOL() string {
+func (obj environment) Protocol() string {
 	return obj.appPROTOCOL
 }
 
-func (obj environment) AppGlyph() string {
+func (obj environment) Glyph() string {
 	return obj.appGlyph
 }
 
-func (obj environment) AppGlyphColor() string {
+func (obj environment) GlyphColor() string {
 	return obj.appGlyphColor
 }
 
@@ -129,7 +109,7 @@ func (obj environment) UserSecret() string {
 	return obj.userSecret
 }
 
-func (obj environment) AppTemplate() string {
+func (obj environment) Template() string {
 	return obj.appTemplate
 }
 
