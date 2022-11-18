@@ -44,7 +44,7 @@ func GetExtra(orig string, inName string, what string) string {
 
 // Return AppName
 func ApplicationName() string {
-	return Application.Name()
+	return Application.appName
 }
 
 // Return HostName
@@ -81,8 +81,8 @@ func (obj environment) URI() string {
 	return obj.appURI
 }
 
-func (obj environment) Port() string {
-	return obj.appPORT
+func Port() string {
+	return Application.appPORT
 }
 
 func (obj environment) Protocol() string {

@@ -151,7 +151,7 @@ func refresh() {
 func debug() {
 	xlogs.WithFields(xlogs.Fields{"NAME": Application.Name(), "VERSION": Application.Version()}).Info(xtl.Get("Application"))
 	xlogs.WithFields(xlogs.Fields{"URI": Application.DockerURI(), "PORT": Application.DockerPort(), "PROTOCOL": Application.DockerProtocol()}).Info(xtl.Get("Container"))
-	xlogs.WithFields(xlogs.Fields{"URI": Application.URI(), "PORT": Application.Port(), "PROTOCOL": Application.Protocol()}).Info(xtl.Get("Application"))
+	xlogs.WithFields(xlogs.Fields{"URI": Application.URI(), "PORT": Port(), "PROTOCOL": Application.Protocol()}).Info(xtl.Get("Application"))
 	if xsys.IsRunningInDockerContainer() {
 		xlogs.WithFields(xlogs.Fields{"DOCKER": "true"}).Info(xtl.Get("Runtime"))
 	} else {
