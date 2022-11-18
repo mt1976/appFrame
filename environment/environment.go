@@ -4,58 +4,19 @@ import (
 	"os"
 	"strings"
 
-	fio "github.com/mt1976/appFrame/fileio"
-	logs "github.com/mt1976/appFrame/logs"
-	str "github.com/mt1976/appFrame/strings"
-	sys "github.com/mt1976/appFrame/system"
+	xio "github.com/mt1976/appFrame/fileio"
+	xlogs "github.com/mt1976/appFrame/logs"
+	xsys "github.com/mt1976/appFrame/system"
+	xtl "github.com/mt1976/appFrame/translate"
 	"github.com/spf13/viper"
 )
 
 // PATH: application\environment.go
 // Language: go
 
-// Contains Basic Application Environment Information
-type Environment struct {
-	DockerURI              string `mapstructure:"dockerURI"`
-	DockerPORT             string `mapstructure:"dockerPORT"`
-	DockerPROTOCOL         string `mapstructure:"dockerPROTOCOL"`
-	AppName                string `mapstructure:"appName"`
-	AppVersion             string `mapstructure:"appVersion"`
-	AppURI                 string `mapstructure:"appURI"`
-	AppPORT                string `mapstructure:"appPORT"`
-	AppPROTOCOL            string `mapstructure:"appPROTOCOL"`
-	AppGlyph               string `mapstructure:"appGLYPH"`
-	AppGlyphColor          string `mapstructure:"appGLYPHCOLOR"`
-	UserName               string `mapstructure:"userName"`
-	UserPassword           string `mapstructure:"userPassword"`
-	UserSecret             string `mapstructure:"userSecret"`
-	AppTemplate            string `mapstructure:"appTemplate"`
-	AdditionalServices     bool   `mapstructure:"additionalServices"`
-	AdditionalServicesList []string
-}
-
-// Contains Basic Application Environment Information
-var ENV Environment
-
-// Contains Overrides for Application Environment Information
-var OVR map[string]string
-
-// Contains Extra Information to be added to Application Environment Information
-var EXT map[string]string
-
-// Contains Nothing
-var DUMMY map[string]string
-
 func init() {
 
 	Refresh()
-}
-
-func Refresh() {
-	logs.Info("(Re)load environment")
-	ENV, _ = getEnvironment()
-	OVR, _ = fio.GetProperties("overrides.cfg")
-	EXT, _ = fio.GetProperties("extra.cfg")
 }
 
 //TODO - Add Reload Function when the re-load button is pressed.
@@ -69,30 +30,30 @@ func getEnvironment() (env Environment, err error) {
 	FILEEXTN := "env"
 	FULLFILENAME := FILENAME + "." + FILEEXTN
 
-	DUMMY, _ = fio.GetProperties(FULLFILENAME)
+	DUMMY, _ = xio.GetPropertiesFile(FULLFILENAME)
 	//fmt.Println(pwd)
 	FILEPATH := pwd + "/config/"
 
-	if sys.IsRunningInDockerContainer() {
+	if xsys.IsRunningInDockerContainer() {
 		FILEPATH = "/config/"
 	}
 	viper.AddConfigPath(FILEPATH)
 	viper.SetConfigName(FILENAME)
 	viper.SetConfigType(FILEEXTN)
 
-	logs.WithFields(logs.Fields{"File": FULLFILENAME, "Path": FILEPATH}).Info("Environment File")
+	xlogs.WithFields(xlogs.Fields{"File": FULLFILENAME, "Path": FILEPATH}).Info("Environment File")
 
 	viper.AutomaticEnv()
 
 	err = viper.ReadInConfig()
 	if err != nil {
-		logs.Fatal(err)
+		xlogs.Fatal(err)
 		return Environment{}, err
 	}
 
 	err = viper.Unmarshal(&env)
 	if err != nil {
-		logs.Fatal(err)
+		xlogs.Fatal(err)
 		return Environment{}, err
 	}
 	if env.AdditionalServices {
@@ -104,19 +65,35 @@ func getEnvironment() (env Environment, err error) {
 	return env, nil
 }
 
-func Debug() {
-	logs.WithFields(logs.Fields{"NAME": ENV.AppName, "VERSION": ENV.AppVersion}).Info(TextGet("Application"))
-	logs.WithFields(logs.Fields{"URI": ENV.DockerURI, "PORT": ENV.DockerPORT, "PROTOCOL": ENV.DockerPROTOCOL}).Info(TextGet("Container"))
-	logs.WithFields(logs.Fields{"URI": ENV.AppURI, "PORT": ENV.AppPORT, "PROTOCOL": ENV.AppPROTOCOL}).Info(TextGet("Application"))
-	if sys.IsRunningInDockerContainer() {
-		logs.WithFields(logs.Fields{"DOCKER": "true"}).Info(TextGet("Runtime"))
-	} else {
-		logs.WithFields(logs.Fields{"DOCKER": "false"}).Info(TextGet("Runtime"))
+func getOverride(orig string, inName string, what string) string {
+	//fmt.Printf("orig: %v\n", orig)
+	//fmt.Printf("inName: %v\n", inName)
+	//fmt.Printf("what: %v\n", what)
+	val := getValue(Overrides, inName, what)
 
+	//log.WithFields(log.Fields{"orig": orig, "in": inName, "what": what, "value": val}).Info("OVR")
+
+	if val == "" {
+		return orig
 	}
+	//fmt.Printf("val: %v\n", val)
+	return val
 }
 
-func Get(prop map[string]string, inName string, what string) string {
+func getExtra(orig string, inName string, what string) string {
+	//retVal := orig
+	out := getValue(Extras, inName, what)
+	if out == "" {
+		out = orig
+	}
+	//log.Info("EXT: ", orig, ":", inName, ":", what, ":", out, ":")
+	out = getOverride(out, inName, what)
+	//if out2 == "" {
+	//log.Info("OVR: |", inName, "|", what, "|", out, "|", orig, "|")
+	return out
+}
+
+func getValue(prop map[string]string, inName string, what string) string {
 	what = strings.ToLower(what)
 	search := inName + what
 	rVal := prop[search]
@@ -128,19 +105,11 @@ func Get(prop map[string]string, inName string, what string) string {
 	return rVal
 }
 
-func EnvironmentOverrideGet(orig string, inName string, what string) string {
-	return environmentOverrideGet(orig, inName, what)
-}
-
-func EnvironmentExtraGet(orig string, inName string, what string) string {
-	return environmentExtraGet(orig, inName, what)
-}
-
-func environmentOverrideGet(orig string, inName string, what string) string {
+func getConfig(orig string, inName string, what string) string {
 	//fmt.Printf("orig: %v\n", orig)
 	//fmt.Printf("inName: %v\n", inName)
 	//fmt.Printf("what: %v\n", what)
-	val := Get(OVR, inName, what)
+	val := getValue(Config, inName, what)
 
 	//log.WithFields(log.Fields{"orig": orig, "in": inName, "what": what, "value": val}).Info("OVR")
 
@@ -151,39 +120,22 @@ func environmentOverrideGet(orig string, inName string, what string) string {
 	return val
 }
 
-func environmentExtraGet(orig string, inName string, what string) string {
-	//retVal := orig
-	out := Get(EXT, inName, what)
-	if out == "" {
-		out = orig
+func refresh() {
+	xlogs.Info("(Re)load environment")
+	Application, _ = getEnvironment()
+	Config, _ = xio.GetPropertiesFile("application.cfg")
+	Overrides, _ = xio.GetPropertiesFile("overrides.cfg")
+	Extras, _ = xio.GetPropertiesFile("extra.cfg")
+}
+
+func debug() {
+	xlogs.WithFields(xlogs.Fields{"NAME": Application.AppName, "VERSION": Application.AppVersion}).Info(xtl.Get("Application"))
+	xlogs.WithFields(xlogs.Fields{"URI": Application.DockerURI, "PORT": Application.DockerPORT, "PROTOCOL": Application.DockerPROTOCOL}).Info(xtl.Get("Container"))
+	xlogs.WithFields(xlogs.Fields{"URI": Application.AppURI, "PORT": Application.AppPORT, "PROTOCOL": Application.AppPROTOCOL}).Info(xtl.Get("Application"))
+	if xsys.IsRunningInDockerContainer() {
+		xlogs.WithFields(xlogs.Fields{"DOCKER": "true"}).Info(xtl.Get("Runtime"))
+	} else {
+		xlogs.WithFields(xlogs.Fields{"DOCKER": "false"}).Info(xtl.Get("Runtime"))
+
 	}
-	//log.Info("EXT: ", orig, ":", inName, ":", what, ":", out, ":")
-	out = environmentOverrideGet(out, inName, what)
-	//if out2 == "" {
-	//log.Info("OVR: |", inName, "|", what, "|", out, "|", orig, "|")
-	return out
-}
-
-func TextGet(in string) string {
-	//log.Info("TextGet: ", in)
-	//log.Info("TextGet: ", lowerFirst(in)+"TXT")
-	out := environmentOverrideGet("", str.LowerFirst(in), "TXT")
-	//log.Info("TextGet: In :", in)
-	//log.Info("TextGet: Out :", out)
-	return out
-}
-
-// Return AppName
-func ApplicationName() string {
-	return ENV.AppName
-}
-
-// Return HostName
-func HostName() string {
-	return sys.SystemInfoGet().Hostname
-}
-
-// Return Application HTTP Port
-func ApplicationHTTPPort() string {
-	return ENV.AppPORT
 }

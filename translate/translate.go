@@ -3,17 +3,14 @@ package translate
 import (
 	"strings"
 
-	fio "github.com/mt1976/appFrame/fileio"
+	xio "github.com/mt1976/appFrame/fileio"
 )
 
-// Contains Nothing
-var TRANSLATIONS map[string]string
-
 func init() {
-	TRANSLATIONS, _ = fio.GetProperties("translate.dat")
+	TRANSLATIONS, _ = xio.GetPropertiesFile("translate.dat")
 }
 
-func Get(in string) string {
+func get(in string) string {
 	//log.Info("TextGet: ", in)
 	//log.Info("TextGet: ", lowerFirst(in)+"TXT")
 	search := strings.ToLower(in)

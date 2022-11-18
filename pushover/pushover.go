@@ -6,17 +6,12 @@ import (
 	"time"
 
 	"github.com/gregdel/pushover"
-	env "github.com/mt1976/appFrame/environment"
-	logs "github.com/mt1976/appFrame/logs"
+	xenv "github.com/mt1976/appFrame/environment"
+	xlogs "github.com/mt1976/appFrame/logs"
 	"github.com/spf13/viper"
 )
 
-type Notification_Config struct {
-	PushoverKey   string `mapstructure:"pushoverkey"`
-	PushoverToken string `mapstructure:"pushovertoken"`
-}
-
-func notification_GetConfig() (config Notification_Config, err error) {
+func notification_GetConfig() (config CONFIG, err error) {
 	// get current os directory path
 	pwd, _ := os.Getwd()
 
@@ -28,7 +23,7 @@ func notification_GetConfig() (config Notification_Config, err error) {
 
 	err = viper.ReadInConfig()
 	if err != nil {
-		logs.Fatal(err)
+		xlogs.Fatal(err)
 		return
 	}
 
@@ -38,127 +33,20 @@ func notification_GetConfig() (config Notification_Config, err error) {
 	return config, err
 }
 
-func Notification_Emergency(messageTitle string, messageBody string) {
-	cfg, _ := notification_GetConfig()
-	//fmt.Printf("cfg: %v\n", cfg)
-	app := pushover.New(cfg.PushoverKey)
-
-	// Create a new recipient
-	recipient := pushover.NewRecipient(cfg.PushoverToken)
-
-	// Create the message to send
-	messageBody = messageBody + " - " + env.HostName()
-	messageTitle = "[" + env.ApplicationName() + "] Notification - " + messageTitle + " - " + env.HostName()
-
-	// NOTE Notification Message & Title
-	message := Notification_New(messageTitle, messageBody, pushover.PriorityEmergency)
-
-	// Send the message to the recipient
-	_, err := app.SendMessage(message, recipient)
-	if err != nil {
-		logs.Panic(err)
-	}
-}
-
-func Notification_New(title string, body string, priority int) *pushover.Message {
-	port := env.ApplicationHTTPPort()
+func new(title string, body string, priority int) *pushover.Message {
+	port := xenv.ApplicationHTTPPort()
 
 	return &pushover.Message{
 		Message:     body,
 		Title:       title,
 		Priority:    priority,
-		URL:         "http://" + env.HostName() + ":" + port + "/",
-		URLTitle:    env.HostName(),
+		URL:         "http://" + xenv.HostName() + ":" + port + "/",
+		URLTitle:    xenv.HostName(),
 		Timestamp:   time.Now().Unix(),
 		Retry:       60 * time.Second,
 		Expire:      time.Hour,
-		DeviceName:  strings.ReplaceAll(env.HostName(), ".", "_"),
-		CallbackURL: "http://" + env.HostName() + ":" + port + "/ACKNotification",
+		DeviceName:  strings.ReplaceAll(xenv.HostName(), ".", "_"),
+		CallbackURL: "http://" + xenv.HostName() + ":" + port + "/ACKNotification",
 		Sound:       pushover.SoundCosmic,
-	}
-}
-
-func Notification_Normal(messageTitle string, messageBody string) {
-	cfg, _ := notification_GetConfig()
-	app := pushover.New(cfg.PushoverKey)
-
-	// Create a new recipient
-	recipient := pushover.NewRecipient(cfg.PushoverToken)
-
-	// Create the message to send
-	messageBody = messageBody + " - " + env.HostName()
-	messageTitle = "[" + env.ApplicationName() + "] Notification - " + messageTitle + " - " + env.HostName()
-
-	// NOTE Notification Message & Title
-	message := Notification_New(messageTitle, messageBody, pushover.PriorityNormal)
-
-	// Send the message to the recipient
-	_, err := app.SendMessage(message, recipient)
-	if err != nil {
-		logs.Panic(err)
-	}
-}
-
-func Notification_URL(messageTitle string, messageBody string, url string) {
-	cfg, _ := notification_GetConfig()
-	app := pushover.New(cfg.PushoverKey)
-
-	// Create a new recipient
-	recipient := pushover.NewRecipient(cfg.PushoverToken)
-
-	// Create the message to send
-	messageBody = messageBody + " - " + env.HostName()
-	messageTitle = "[" + env.ApplicationName() + "] Notification - " + messageTitle + " - " + env.HostName()
-
-	// NOTE Notification Message & Title
-	message := Notification_New(messageTitle, messageBody, pushover.PriorityNormal)
-	message.URL = message.URL + url
-
-	// Send the message to the recipient
-	_, err := app.SendMessage(message, recipient)
-	if err != nil {
-		logs.Panic(err)
-	}
-}
-
-func Notification_High(messageTitle string, messageBody string) {
-	cfg, _ := notification_GetConfig()
-	app := pushover.New(cfg.PushoverKey)
-
-	// Create a new recipient
-	recipient := pushover.NewRecipient(cfg.PushoverToken)
-
-	// Create the message to send
-	messageBody = messageBody + " - " + env.HostName()
-	messageTitle = "[" + env.ApplicationName() + "] Notification - " + messageTitle + " - " + env.HostName()
-
-	// NOTE Notification Message
-	message := Notification_New(messageTitle, messageBody, pushover.PriorityHigh)
-
-	// Send the message to the recipient
-	_, err := app.SendMessage(message, recipient)
-	if err != nil {
-		logs.Panic(err)
-	}
-}
-
-func Notification_Low(messageTitle string, messageBody string) {
-	cfg, _ := notification_GetConfig()
-	app := pushover.New(cfg.PushoverKey)
-
-	// Create a new recipient
-	recipient := pushover.NewRecipient(cfg.PushoverToken)
-
-	// Create the message to send
-	messageBody = messageBody + " - " + env.HostName()
-	messageTitle = "[" + env.ApplicationName() + "] Notification - " + messageTitle + " - " + env.HostName()
-
-	// NOTE Notification Message
-	message := Notification_New(messageTitle, messageBody, pushover.PriorityLow)
-
-	// Send the message to the recipient
-	_, err := app.SendMessage(message, recipient)
-	if err != nil {
-		logs.Panic(err)
 	}
 }
