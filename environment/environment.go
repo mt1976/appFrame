@@ -61,7 +61,7 @@ func getEnvironment() (env environment, err error) {
 	viper.SetConfigName(FILENAME)
 	viper.SetConfigType(FILEEXTN)
 
-	xlogs.WithFields(xlogs.Fields{"File": FULLFILENAME, "Path": FILEPATH}).Info("Environment File")
+	//xlogs.WithFields(xlogs.Fields{"File": FULLFILENAME, "Path": FILEPATH}).Info("Environment")
 
 	viper.AutomaticEnv()
 
