@@ -207,7 +207,7 @@ func getMemoryTotal() uint64 {
 
 func getMemoryFree() uint64 {
 	v, _ := mem.VirtualMemory()
-	xlogs.WithFields(xlogs.Fields{"Free": v.Free, "Total": v.Total, "Other": v.String()}).Info(xtl.Get("memory"))
+	xlogs.WithFields(xlogs.Fields{"Free": humanize.Bytes(v.Free), "Total": humanize.Bytes(v.Total)}).Info(xtl.Get("memory"))
 	return v.Free
 }
 
