@@ -43,7 +43,7 @@ func get() SystemInfo {
 	thisSystem.MemoryInfo, _ = ghw.Memory()
 	thisSystem.BlockInfo, _ = ghw.Block()
 	thisSystem.NetworkInfo, _ = ghw.Network()
-	thisSystem.TopologyInfo, _ = ghw.Topology()
+	//thisSystem.TopologyInfo, _ = ghw.Topology()
 	thisSystem.PCIInfo, _ = ghw.PCI()
 	thisSystem.BIOSInfo, _ = ghw.BIOS()
 	thisSystem.ChassisInfo, _ = ghw.Chassis()
