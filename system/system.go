@@ -207,7 +207,7 @@ func getMemoryTotal() uint64 {
 
 func getMemoryFree() uint64 {
 	v, _ := mem.VirtualMemory()
-	xlogs.WithFields(xlogs.Fields{"Free": humanize.Bytes(v.Free), "Total": humanize.Bytes(v.Total)}).Info(xtl.Get("memory"))
+	//xlogs.WithFields(xlogs.Fields{"Free": humanize.Bytes(v.Free), "Total": humanize.Bytes(v.Total)}).Info(xtl.Get("memory"))
 	return v.Free
 }
 
@@ -215,7 +215,7 @@ func getCPUInfo() CPUInfo {
 	var thisCPU CPUInfo
 	thisCPU.NoCPUs = runtime.NumCPU()
 	thisCPU.CPUs = strconv.Itoa(thisCPU.NoCPUs)
-	xlogs.WithFields(xlogs.Fields{"CPUs": thisCPU.NoCPUs, "Info": thisCPU.CPUs}).Info(xtl.Get("cpu"))
+	//xlogs.WithFields(xlogs.Fields{"CPUs": thisCPU.NoCPUs, "Info": thisCPU.CPUs}).Info(xtl.Get("cpu"))
 	return thisCPU
 }
 
@@ -225,7 +225,7 @@ func getUptime() string {
 		xlogs.Error("error getting uptime: ", err)
 	}
 	upString, _ := time.ParseDuration(strconv.Itoa(int(uptime)) + "s")
-	xlogs.WithField("uptime", upString).Debug("uptime")
+	//xlogs.WithField("uptime", upString).Debug("uptime")
 	return upString.String()
 }
 
