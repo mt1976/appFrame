@@ -73,8 +73,7 @@ func build(messageBody string, messageTitle string, priority int) (*pushover.Pus
 
 	recipient := pushover.NewRecipient(cTokens.PushoverToken)
 
-	messageBody = messageBody + " - " + cHostName
-	messageTitle = "[" + cAppName + "] " + messageTitle + " - " + cHostName
+	messageTitle = messageTitle + " [" + cHostName + "]"
 
 	message := new(messageTitle, messageBody, priority)
 	return app, recipient, message
