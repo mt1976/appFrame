@@ -2,118 +2,41 @@ package pushover
 
 import (
 	"github.com/gregdel/pushover"
-	xenv "github.com/mt1976/appFrame/environment"
-	xlogs "github.com/mt1976/appFrame/logs"
 )
 
-type CONFIG struct {
-	PushoverKey   string `mapstructure:"pushoverkey"`
-	PushoverToken string `mapstructure:"pushovertoken"`
-}
-
 func Emergency(messageTitle string, messageBody string) {
-	cfg, _ := notification_GetConfig()
-	//fmt.Printf("cfg: %v\n", cfg)
-	app := pushover.New(cfg.PushoverKey)
-
-	// Create a new recipient
-	recipient := pushover.NewRecipient(cfg.PushoverToken)
-
-	// Create the message to send
-	messageBody = messageBody + " - " + SYS.Hostname
-	messageTitle = "[" + xenv.ApplicationName() + "] Notification - " + messageTitle + " - " + SYS.Hostname
-
-	// NOTE Notification Message & Title
-	message := new(messageTitle, messageBody, pushover.PriorityEmergency)
-
+	// Build Message
+	app, recipient, message := build(messageBody, messageTitle, pushover.PriorityEmergency)
 	// Send the message to the recipient
-	_, err := app.SendMessage(message, recipient)
-	if err != nil {
-		xlogs.Panic(err)
-	}
+	send(app, message, recipient)
 }
 
 func Normal(messageTitle string, messageBody string) {
-	cfg, _ := notification_GetConfig()
-	push := pushover.New(cfg.PushoverKey)
-
-	// Create a new recipient
-	recipient := pushover.NewRecipient(cfg.PushoverToken)
-
-	// Create the message to send
-	messageBody = messageBody + " - " + SYS.Hostname
-	messageTitle = "[" + xenv.ApplicationName() + "] Notification - " + messageTitle + " - " + SYS.Hostname
-
-	// NOTE Notification Message & Title
-	message := new(messageTitle, messageBody, pushover.PriorityNormal)
-
+	// Build Message
+	app, recipient, message := build(messageBody, messageTitle, pushover.PriorityNormal)
 	// Send the message to the recipient
-	_, err := push.SendMessage(message, recipient)
-	if err != nil {
-		xlogs.Panic(err)
-	}
+	send(app, message, recipient)
 }
 
 func WithURL(messageTitle string, messageBody string, url string) {
-	cfg, _ := notification_GetConfig()
-	app := pushover.New(cfg.PushoverKey)
-
-	// Create a new recipient
-	recipient := pushover.NewRecipient(cfg.PushoverToken)
-
-	// Create the message to send
-	messageBody = messageBody + " - " + SYS.Hostname
-	messageTitle = "[" + xenv.ApplicationName() + "] Notification - " + messageTitle + " - " + SYS.Hostname
-
-	// NOTE Notification Message & Title
-	message := new(messageTitle, messageBody, pushover.PriorityNormal)
+	// Build Message
+	app, recipient, message := build(messageBody, messageTitle, pushover.PriorityNormal)
+	// Add URI/URL
 	message.URL = message.URL + url
-
 	// Send the message to the recipient
-	_, err := app.SendMessage(message, recipient)
-	if err != nil {
-		xlogs.Panic(err)
-	}
+	send(app, message, recipient)
 }
 
 func High(messageTitle string, messageBody string) {
-	cfg, _ := notification_GetConfig()
-	app := pushover.New(cfg.PushoverKey)
-
-	// Create a new recipient
-	recipient := pushover.NewRecipient(cfg.PushoverToken)
-
-	// Create the message to send
-	messageBody = messageBody + " - " + SYS.Hostname
-	messageTitle = "[" + xenv.ApplicationName() + "] Notification - " + messageTitle + " - " + SYS.Hostname
-
-	// NOTE Notification Message
-	message := new(messageTitle, messageBody, pushover.PriorityHigh)
-
+	// Build Message
+	app, recipient, message := build(messageBody, messageTitle, pushover.PriorityHigh)
 	// Send the message to the recipient
-	_, err := app.SendMessage(message, recipient)
-	if err != nil {
-		xlogs.Panic(err)
-	}
+	send(app, message, recipient)
 }
 
 func Low(messageTitle string, messageBody string) {
-	cfg, _ := notification_GetConfig()
-	app := pushover.New(cfg.PushoverKey)
-
-	// Create a new recipient
-	recipient := pushover.NewRecipient(cfg.PushoverToken)
-
-	// Create the message to send
-	messageBody = messageBody + " - " + SYS.Hostname
-	messageTitle = "[" + xenv.ApplicationName() + "] Notification - " + messageTitle + " - " + SYS.Hostname
-
-	// NOTE Notification Message
-	message := new(messageTitle, messageBody, pushover.PriorityLow)
-
+	//cfg, _ := notification_GetConfig()
+	app, recipient, message := build(messageBody, messageTitle, pushover.PriorityLow)
 	// Send the message to the recipient
-	_, err := app.SendMessage(message, recipient)
-	if err != nil {
-		xlogs.Panic(err)
-	}
+	send(app, message, recipient)
 }
