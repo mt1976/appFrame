@@ -8,8 +8,11 @@ import (
 	"github.com/gregdel/pushover"
 	xenv "github.com/mt1976/appFrame/environment"
 	xlogs "github.com/mt1976/appFrame/logs"
+	xsys "github.com/mt1976/appFrame/system"
 	"github.com/spf13/viper"
 )
+
+var SYS xsys.SystemInfo
 
 func notification_GetConfig() (config CONFIG, err error) {
 	// get current os directory path
@@ -40,13 +43,17 @@ func new(title string, body string, priority int) *pushover.Message {
 		Message:     body,
 		Title:       title,
 		Priority:    priority,
-		URL:         "http://" + xenv.HostName() + ":" + port + "/",
-		URLTitle:    xenv.HostName(),
+		URL:         "http://" + SYS.Hostname + ":" + port + "/",
+		URLTitle:    SYS.Hostname,
 		Timestamp:   time.Now().Unix(),
 		Retry:       60 * time.Second,
 		Expire:      time.Hour,
-		DeviceName:  strings.ReplaceAll(xenv.HostName(), ".", "_"),
-		CallbackURL: "http://" + xenv.HostName() + ":" + port + "/ACKNotification",
+		DeviceName:  strings.ReplaceAll(SYS.Hostname, ".", "_"),
+		CallbackURL: "http://" + SYS.Hostname + ":" + port + "/ACKNotification",
 		Sound:       pushover.SoundCosmic,
 	}
+}
+
+func init() {
+	SYS = xsys.Get()
 }

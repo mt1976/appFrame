@@ -20,8 +20,8 @@ func Emergency(messageTitle string, messageBody string) {
 	recipient := pushover.NewRecipient(cfg.PushoverToken)
 
 	// Create the message to send
-	messageBody = messageBody + " - " + xenv.HostName()
-	messageTitle = "[" + xenv.ApplicationName() + "] Notification - " + messageTitle + " - " + xenv.HostName()
+	messageBody = messageBody + " - " + SYS.Hostname
+	messageTitle = "[" + xenv.ApplicationName() + "] Notification - " + messageTitle + " - " + SYS.Hostname
 
 	// NOTE Notification Message & Title
 	message := new(messageTitle, messageBody, pushover.PriorityEmergency)
@@ -35,20 +35,20 @@ func Emergency(messageTitle string, messageBody string) {
 
 func Normal(messageTitle string, messageBody string) {
 	cfg, _ := notification_GetConfig()
-	app := pushover.New(cfg.PushoverKey)
+	push := pushover.New(cfg.PushoverKey)
 
 	// Create a new recipient
 	recipient := pushover.NewRecipient(cfg.PushoverToken)
 
 	// Create the message to send
-	messageBody = messageBody + " - " + xenv.HostName()
-	messageTitle = "[" + xenv.ApplicationName() + "] Notification - " + messageTitle + " - " + xenv.HostName()
+	messageBody = messageBody + " - " + SYS.Hostname
+	messageTitle = "[" + xenv.ApplicationName() + "] Notification - " + messageTitle + " - " + SYS.Hostname
 
 	// NOTE Notification Message & Title
 	message := new(messageTitle, messageBody, pushover.PriorityNormal)
 
 	// Send the message to the recipient
-	_, err := app.SendMessage(message, recipient)
+	_, err := push.SendMessage(message, recipient)
 	if err != nil {
 		xlogs.Panic(err)
 	}
@@ -62,8 +62,8 @@ func WithURL(messageTitle string, messageBody string, url string) {
 	recipient := pushover.NewRecipient(cfg.PushoverToken)
 
 	// Create the message to send
-	messageBody = messageBody + " - " + xenv.HostName()
-	messageTitle = "[" + xenv.ApplicationName() + "] Notification - " + messageTitle + " - " + xenv.HostName()
+	messageBody = messageBody + " - " + SYS.Hostname
+	messageTitle = "[" + xenv.ApplicationName() + "] Notification - " + messageTitle + " - " + SYS.Hostname
 
 	// NOTE Notification Message & Title
 	message := new(messageTitle, messageBody, pushover.PriorityNormal)
@@ -84,8 +84,8 @@ func High(messageTitle string, messageBody string) {
 	recipient := pushover.NewRecipient(cfg.PushoverToken)
 
 	// Create the message to send
-	messageBody = messageBody + " - " + xenv.HostName()
-	messageTitle = "[" + xenv.ApplicationName() + "] Notification - " + messageTitle + " - " + xenv.HostName()
+	messageBody = messageBody + " - " + SYS.Hostname
+	messageTitle = "[" + xenv.ApplicationName() + "] Notification - " + messageTitle + " - " + SYS.Hostname
 
 	// NOTE Notification Message
 	message := new(messageTitle, messageBody, pushover.PriorityHigh)
@@ -105,8 +105,8 @@ func Low(messageTitle string, messageBody string) {
 	recipient := pushover.NewRecipient(cfg.PushoverToken)
 
 	// Create the message to send
-	messageBody = messageBody + " - " + xenv.HostName()
-	messageTitle = "[" + xenv.ApplicationName() + "] Notification - " + messageTitle + " - " + xenv.HostName()
+	messageBody = messageBody + " - " + SYS.Hostname
+	messageTitle = "[" + xenv.ApplicationName() + "] Notification - " + messageTitle + " - " + SYS.Hostname
 
 	// NOTE Notification Message
 	message := new(messageTitle, messageBody, pushover.PriorityLow)
