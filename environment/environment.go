@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	xio "github.com/mt1976/appFrame/fileio"
+	"github.com/mt1976/appFrame/logs"
 	xlogs "github.com/mt1976/appFrame/logs"
 	xsys "github.com/mt1976/appFrame/system"
 	xtl "github.com/mt1976/appFrame/translate"
@@ -113,16 +114,25 @@ func getExtra(orig string, inName string, what string) string {
 	return out
 }
 
-func getValue(prop map[string]string, inName string, what string) string {
-	what = strings.ToLower(what)
-	search := inName + what
-	rVal := prop[search]
-	//spew.Dump(prop)
-	//log.WithFields(log.Fields{"NAME": inName, "WHAT": what, "VALUE": rVal}).Info("EnvironmentGet")
-	//if rVal == "" {
-	//		return inName
-	//	}
-	return rVal
+func getValue(prop map[string]string, inProperty string, what string) string {
+
+	search := inProperty + what
+
+	low_var := strings.ToLower(search)
+	rtn_var := prop[low_var]
+	env_var := "APP_" + strings.ToUpper(search)
+
+	logs.Information("GetApplicationProperty : " + low_var + " " + env_var)
+
+	env_value := os.Getenv(env_var)
+	if env_value != "" {
+		logs.Information(inProperty, rtn_var, env_var, env_value)
+		return env_value
+	}
+
+	logs.Information("GetApplicationProperty", rtn_var)
+
+	return rtn_var
 }
 
 func getConfig(orig string, inName string, what string) string {
