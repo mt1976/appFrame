@@ -14,3 +14,7 @@ func Verbose() {
 func Normal() {
 	setVerbose(false)
 }
+
+func GetValue(key string, name string) string {
+	return get(key + "$" + name)
+}

@@ -32,7 +32,7 @@ func get(in string) string {
 		} else {
 
 			if verboseLogging() {
-				xlogs.WithFields(xlogs.Fields{"in": in, "search": search, "alternate": search2}).Warn("No Transalation Found")
+				xlogs.WithFields(xlogs.Fields{"using": in, "search": search, "alternate": search2}).Warn("No Translation")
 				//log.Println("TextGet: No Translation for ", in)
 			}
 
