@@ -5,8 +5,6 @@ import (
 	"time"
 )
 
-//var s.Styles spinnerStyles
-
 type framesIndex int
 
 type Spinner struct {
@@ -42,16 +40,13 @@ type spinnerStyles struct {
 
 // new returns a new Spinner, with defaults
 func new() *Spinner {
-
-	//s.Styles.initialiseStyles()
-	// ...
 	sp := &Spinner{row: 0, column: 0}
-	sp.frames = sp.getFrames(sp.style)
-	sp.cycle = len(sp.frames)
 	sp.sequence = 0
 	sp.slow = 0
-	sp.Styles = sp.Styles.initialiseStyles()
+	sp.Styles = initialiseStyles()
 	sp.style = sp.Styles.Default
+	sp.frames = sp.getFrames(sp.style)
+	sp.cycle = len(sp.frames)
 	return sp
 }
 
@@ -92,11 +87,11 @@ func (s *Spinner) setLocation(row int, column int) *Spinner {
 // getFrames returns the characters for a given style
 func (s *Spinner) getFrames(style framesIndex) []string {
 
-	rtn := []string{}
+	rtn := []string{"-", "\\", "|", "/"}
 
 	switch style {
 	case s.Styles.Default:
-		// Do nothinbg
+	//	rtn = []string{"-", "\\", "|", "/"}
 	case s.Styles.Plus:
 		rtn = []string{"+", "x"}
 	case s.Styles.Directions:
@@ -135,15 +130,16 @@ func (s *Spinner) getFrames(style framesIndex) []string {
 	case s.Styles.DirectionsSlow:
 		rtn = []string{"<", "<", "∧", "∧", ">", ">", "v", "v"}
 	default:
-		rtn = []string{"-", "\\", "|", "/"}
+		//rtn = []string{"-", "\\", "|", "/"}
 	}
 	// ...
 	return rtn
 }
 
 // initialiseStyles sets the default styles
-func (s *spinnerStyles) initialiseStyles() *spinnerStyles {
+func initialiseStyles() *spinnerStyles {
 	// ...
+	s := &spinnerStyles{}
 	s.Default = 1
 	s.Plus = 2
 	s.Directions = 3

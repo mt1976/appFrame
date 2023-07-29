@@ -22,8 +22,6 @@ func (s *Spinner) TickWithMessage(message string) {
 
 // Style sets the style of the spinner
 func (s *Spinner) Style(style framesIndex) *Spinner {
-	// ...
-
 	return s.setStyle(style)
 }
 
@@ -34,14 +32,14 @@ func (s *Spinner) Style(style framesIndex) *Spinner {
 
 // Debug prints debug information to stdout
 func (s *Spinner) Debug() {
-	// ...
-
 	log.Println("Debug")
 	log.Println("style:", s.style)
 	//log.Println("row:", s.row)
 	//log.Println("column:", s.column)
 	log.Println("frames:", s.frames)
 	log.Println("speed:", s.slow)
+	log.Println("Styles:", s.Styles)
+	log.Println("cycle:", s.cycle)
 
 }
 
