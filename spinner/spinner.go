@@ -18,7 +18,7 @@ type Spinner struct {
 	cycle    int
 	sequence int
 	slow     time.Duration
-	Styles   spinnerStyles
+	Styles   *spinnerStyles
 }
 
 type spinnerStyles struct {
@@ -50,7 +50,7 @@ func new() *Spinner {
 	sp.cycle = len(sp.frames)
 	sp.sequence = 0
 	sp.slow = 0
-	sp.Styles.initialiseStyles()
+	sp.Styles = sp.Styles.initialiseStyles()
 	sp.style = sp.Styles.Default
 	return sp
 }
