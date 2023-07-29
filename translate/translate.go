@@ -7,13 +7,19 @@ import (
 	xlogs "github.com/mt1976/appFrame/logs"
 )
 
+// verbose is a flag to indicate verbose logging
 var verbose bool
 
+// translationData is a map of translations, shared by all instances of the translate package
+var translationData map[string]string
+
+// init loads the translate.dat file and sets verbose to false
 func init() {
-	TRANSLATIONS, _ = xio.GetPropertiesFile("translate.dat")
+	translationData, _ = xio.GetPropertiesFile("translate.dat")
 	setVerbose(false)
 }
 
+// Get returns a translated string or the original string if no translation is found
 func get(in string) string {
 	//log.Info("TextGet: ", in)
 	//log.Info("TextGet: ", lowerFirst(in)+"TXT")
@@ -21,14 +27,14 @@ func get(in string) string {
 	search = strings.ReplaceAll(search, " ", "")
 	//out := str.LowerFirst(in) + "TODO"
 	out := in
-	if TRANSLATIONS[search] != "" {
-		out = TRANSLATIONS[search]
+	if translationData[search] != "" {
+		out = translationData[search]
 	} else {
 
 		search2 := strings.ToLower(in)
 		search2 = strings.ReplaceAll(search2, " ", ".")
-		if TRANSLATIONS[search2] != "" {
-			out = TRANSLATIONS[search2]
+		if translationData[search2] != "" {
+			out = translationData[search2]
 		} else {
 
 			if verboseLogging() {
@@ -43,10 +49,12 @@ func get(in string) string {
 	return out
 }
 
+// setVerbose sets the verbose flag
 func setVerbose(v bool) {
 	verbose = v
 }
 
+// verboseLogging returns the verbose flag
 func verboseLogging() bool {
 	return verbose
 }

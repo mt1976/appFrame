@@ -5,31 +5,35 @@ import (
 	"time"
 )
 
-var Style Styles
+var activeStyle Styles
+
+type framesIndex int
 
 type Spinner struct {
 	// ...
-	style      FramesIndex
-	row        int
-	column     int
-	characters []string
-	cycle      int
-	sequence   int
-	slow       time.Duration
+	style    framesIndex
+	row      int
+	column   int
+	frames   []string
+	cycle    int
+	sequence int
+	slow     time.Duration
 }
 
+// new returns a new Spinner, with defaults
 func new() *Spinner {
 
-	Style.initialiseStyles()
+	activeStyle.initialiseStyles()
 	// ...
-	sp := &Spinner{style: Style.Default, row: 0, column: 0}
-	sp.characters = getCharacters(sp.style)
-	sp.cycle = len(sp.characters)
+	sp := &Spinner{style: activeStyle.Default, row: 0, column: 0}
+	sp.frames = getFrames(sp.style)
+	sp.cycle = len(sp.frames)
 	sp.sequence = 0
 	sp.slow = 0
 	return sp
 }
 
+// tick advances the spinner to the next state
 func (s *Spinner) tick(msg string) {
 	// ...
 	//	log.Println("tick")
@@ -38,22 +42,24 @@ func (s *Spinner) tick(msg string) {
 		s.sequence = 0
 	}
 	//	log.Println("sequence:", s.sequence)
-	fmt.Print("\033[u\033[K[" + s.characters[s.sequence] + "] " + msg)
+	fmt.Print("\033[u\033[K[" + s.frames[s.sequence] + "] " + msg)
 	if s.slow > 0 {
 		//		log.Println("sleeping")
 		time.Sleep(s.slow)
 	}
 }
 
-func (s *Spinner) setStyle(style FramesIndex) *Spinner {
+// setStyle sets the style of the spinner
+func (s *Spinner) setStyle(style framesIndex) *Spinner {
 	// ...
 	s.style = style
-	s.characters = getCharacters(style)
-	s.cycle = len(s.characters)
+	s.frames = getFrames(style)
+	s.cycle = len(s.frames)
 	s.sequence = 0
 	return s
 }
 
+// setLocation sets the location of the spinner
 func (s *Spinner) setLocation(row int, column int) *Spinner {
 	// ...
 	s.row = row
@@ -61,38 +67,39 @@ func (s *Spinner) setLocation(row int, column int) *Spinner {
 	return s
 }
 
-func getCharacters(style FramesIndex) []string {
+// getFrames returns the characters for a given style
+func getFrames(style framesIndex) []string {
 
 	rtn := []string{}
 
 	switch style {
-	case Style.Default:
+	case activeStyle.Default:
 		// Do nothinbg
-	case Style.Plus:
+	case activeStyle.Plus:
 		rtn = []string{"+", "x"}
-	case Style.Directions:
+	case activeStyle.Directions:
 		rtn = []string{"v", "<", "^", ">"}
-	case Style.Dots:
+	case activeStyle.Dots:
 		rtn = []string{".   ", " .  ", "  . ", "   ."}
-	case Style.Ball:
+	case activeStyle.Ball:
 		rtn = []string{"◐", "◓", "◑", "◒"}
-	case Style.SquareClock:
+	case activeStyle.SquareClock:
 		rtn = []string{"◰", "◳", "◲", "◱"}
-	case Style.Clock:
+	case activeStyle.Clock:
 		rtn = []string{"◴", "◷", "◶", "◵"}
-	case Style.Snake:
+	case activeStyle.Snake:
 		rtn = []string{"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"}
-	case Style.ChasingDots:
+	case activeStyle.ChasingDots:
 		rtn = []string{".  ", ".. ", "...", " ..", "  .", "   "}
-	case Style.Arrows:
+	case activeStyle.Arrows:
 		rtn = []string{"←", "↖", "↑", "↗", "→", "↘", "↓", "↙"}
-	case Style.Grow:
+	case activeStyle.Grow:
 		rtn = []string{"▁", "▃", "▄", "▅", "▆", "▇", "█", "▇", "▆", "▅", "▄", "▃"}
-	case Style.Cross:
+	case activeStyle.Cross:
 		rtn = []string{"┤", "┘", "┴", "└", "├", "┌", "┬", "┐"}
-	case Style.Flip:
+	case activeStyle.Flip:
 		rtn = []string{"_", "_", "_", "-", "`", "`", "'", "´", "-", "_", "_", "_"}
-	case Style.Cylon:
+	case activeStyle.Cylon:
 		rtn = []string{"( ●    )",
 			"(  ●   )",
 			"(   ●  )",
@@ -103,7 +110,7 @@ func getCharacters(style FramesIndex) []string {
 			"(  ●   )",
 			"( ●    )",
 			"(●     )"}
-	case Style.DirectionsSlow:
+	case activeStyle.DirectionsSlow:
 		rtn = []string{"<", "<", "∧", "∧", ">", ">", "v", "v"}
 	default:
 		rtn = []string{"-", "\\", "|", "/"}
@@ -112,6 +119,7 @@ func getCharacters(style FramesIndex) []string {
 	return rtn
 }
 
+// initialiseStyles sets the default styles
 func (s *Styles) initialiseStyles() *Styles {
 	// ...
 	s.Default = 1
@@ -132,8 +140,10 @@ func (s *Styles) initialiseStyles() *Styles {
 	return s
 }
 
-func (s *Spinner) setDelay(periodInMillis time.Duration) *Spinner {
-	// ...
-	s.slow = periodInMillis
+// Delay sets the delay between frames
+func (s *Spinner) setDelay(seconds float64) *Spinner {
+	nanos := time.Second.Nanoseconds()
+	seconds = float64(nanos) * seconds
+	s.slow = time.Duration(seconds)
 	return s
 }

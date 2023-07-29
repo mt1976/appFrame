@@ -2,44 +2,45 @@ package spinner
 
 import (
 	"log"
-	"time"
 )
 
 type Styles struct {
 	// ...
-	Default        FramesIndex
-	Plus           FramesIndex
-	Directions     FramesIndex
-	Dots           FramesIndex
-	Ball           FramesIndex
-	SquareClock    FramesIndex
-	Clock          FramesIndex
-	Snake          FramesIndex
-	ChasingDots    FramesIndex
-	Arrows         FramesIndex
-	Grow           FramesIndex
-	Cross          FramesIndex
-	Flip           FramesIndex
-	Cylon          FramesIndex
-	DirectionsSlow FramesIndex
+	Default        framesIndex
+	Plus           framesIndex
+	Directions     framesIndex
+	Dots           framesIndex
+	Ball           framesIndex
+	SquareClock    framesIndex
+	Clock          framesIndex
+	Snake          framesIndex
+	ChasingDots    framesIndex
+	Arrows         framesIndex
+	Grow           framesIndex
+	Cross          framesIndex
+	Flip           framesIndex
+	Cylon          framesIndex
+	DirectionsSlow framesIndex
 }
 
-type FramesIndex int
-
+// New returns a new Spinner
 func New() *Spinner {
 	// ...
 	return new()
 }
 
+// Tick advances the spinner to the next state
 func (s *Spinner) Tick() {
 	s.tick("")
 }
 
+// TickWithMessage advances the spinner to the next state and displays a message
 func (s *Spinner) TickWithMessage(message string) {
 	s.tick(message)
 }
 
-func (s *Spinner) Style(style FramesIndex) *Spinner {
+// Style sets the style of the spinner
+func (s *Spinner) Style(style framesIndex) *Spinner {
 	// ...
 
 	return s.setStyle(style)
@@ -50,6 +51,7 @@ func (s *Spinner) Style(style FramesIndex) *Spinner {
 //	return s.setLocation(row, column)
 //}
 
+// Debug prints debug information to stdout
 func (s *Spinner) Debug() {
 	// ...
 
@@ -57,13 +59,13 @@ func (s *Spinner) Debug() {
 	log.Println("style:", s.style)
 	//log.Println("row:", s.row)
 	//log.Println("column:", s.column)
-	log.Println("frames:", s.characters)
+	log.Println("frames:", s.frames)
 	log.Println("speed:", s.slow)
 
 }
 
-func (s *Spinner) Delay(seconds float64) {
-	nanos := time.Second.Nanoseconds()
-	seconds = float64(nanos) * seconds
-	s.setDelay(time.Duration(seconds))
+// Delay sets the delay between frames
+func (s *Spinner) Delay(seconds float64) *Spinner {
+	s.setDelay(seconds)
+	return s
 }

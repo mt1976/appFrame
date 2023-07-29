@@ -92,11 +92,7 @@ func WriteData(fileName string, path string, content string) int {
 
 // Touch returns true if the specified file existing on the filesystem
 func Touch(filename string) bool {
-	info, err := os.Stat(filename)
-	if os.IsNotExist(err) {
-		return false
-	}
-	return !info.IsDir()
+	return touch(filename)
 }
 
 // Empty clears the contents of a specified directory
