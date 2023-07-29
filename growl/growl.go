@@ -5,31 +5,25 @@ import (
 	xstr "github.com/mt1976/appFrame/strings"
 )
 
-// Notify sends a desktop notification
-type growl struct {
-	appName string
-	appIcon string
-}
-
-func (g *growl) growl(msg string) {
+func (g *Growl) growl(msg string) {
 	xnote.Notify(g.appName, msg, g.appIcon)
 }
 
-func new(appName string, appIcon string) *growl {
+func new(appName string, appIcon string) *Growl {
 
 	if appName == "" {
 		appName = xstr.SBracket("Application Name")
 	}
 
-	return &growl{appName: appName, appIcon: appIcon}
+	return &Growl{appName: appName, appIcon: appIcon}
 }
 
-func (g *growl) setAppName(appName string) *growl {
+func (g *Growl) setAppName(appName string) *Growl {
 	g.appName = appName
 	return g
 }
 
-func (g *growl) setAppIcon(appIcon string) *growl {
+func (g *Growl) setAppIcon(appIcon string) *Growl {
 	g.appIcon = appIcon
 	return g
 }
