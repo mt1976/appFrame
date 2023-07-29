@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-var activeStyle Styles
+var activeStyle spinnerStyles
 
 type framesIndex int
 
@@ -18,6 +18,26 @@ type Spinner struct {
 	cycle    int
 	sequence int
 	slow     time.Duration
+	Styles   spinnerStyles
+}
+
+type spinnerStyles struct {
+	// ...
+	Default        framesIndex
+	Plus           framesIndex
+	Directions     framesIndex
+	Dots           framesIndex
+	Ball           framesIndex
+	SquareClock    framesIndex
+	Clock          framesIndex
+	Snake          framesIndex
+	ChasingDots    framesIndex
+	Arrows         framesIndex
+	Grow           framesIndex
+	Cross          framesIndex
+	Flip           framesIndex
+	Cylon          framesIndex
+	DirectionsSlow framesIndex
 }
 
 // new returns a new Spinner, with defaults
@@ -30,6 +50,7 @@ func new() *Spinner {
 	sp.cycle = len(sp.frames)
 	sp.sequence = 0
 	sp.slow = 0
+	sp.Styles.initialiseStyles()
 	return sp
 }
 
@@ -120,7 +141,7 @@ func getFrames(style framesIndex) []string {
 }
 
 // initialiseStyles sets the default styles
-func (s *Styles) initialiseStyles() *Styles {
+func (s *spinnerStyles) initialiseStyles() *spinnerStyles {
 	// ...
 	s.Default = 1
 	s.Plus = 2

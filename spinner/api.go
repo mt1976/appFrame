@@ -4,25 +4,6 @@ import (
 	"log"
 )
 
-type Styles struct {
-	// ...
-	Default        framesIndex
-	Plus           framesIndex
-	Directions     framesIndex
-	Dots           framesIndex
-	Ball           framesIndex
-	SquareClock    framesIndex
-	Clock          framesIndex
-	Snake          framesIndex
-	ChasingDots    framesIndex
-	Arrows         framesIndex
-	Grow           framesIndex
-	Cross          framesIndex
-	Flip           framesIndex
-	Cylon          framesIndex
-	DirectionsSlow framesIndex
-}
-
 // New returns a new Spinner
 func New() *Spinner {
 	// ...
