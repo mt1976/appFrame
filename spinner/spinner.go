@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-var activeStyle spinnerStyles
+//var s.Styles spinnerStyles
 
 type framesIndex int
 
@@ -43,14 +43,15 @@ type spinnerStyles struct {
 // new returns a new Spinner, with defaults
 func new() *Spinner {
 
-	activeStyle.initialiseStyles()
+	//s.Styles.initialiseStyles()
 	// ...
-	sp := &Spinner{style: activeStyle.Default, row: 0, column: 0}
-	sp.frames = getFrames(sp.style)
+	sp := &Spinner{row: 0, column: 0}
+	sp.frames = sp.getFrames(sp.style)
 	sp.cycle = len(sp.frames)
 	sp.sequence = 0
 	sp.slow = 0
 	sp.Styles.initialiseStyles()
+	sp.style = sp.Styles.Default
 	return sp
 }
 
@@ -74,7 +75,7 @@ func (s *Spinner) tick(msg string) {
 func (s *Spinner) setStyle(style framesIndex) *Spinner {
 	// ...
 	s.style = style
-	s.frames = getFrames(style)
+	s.frames = s.getFrames(style)
 	s.cycle = len(s.frames)
 	s.sequence = 0
 	return s
@@ -89,38 +90,38 @@ func (s *Spinner) setLocation(row int, column int) *Spinner {
 }
 
 // getFrames returns the characters for a given style
-func getFrames(style framesIndex) []string {
+func (s *Spinner) getFrames(style framesIndex) []string {
 
 	rtn := []string{}
 
 	switch style {
-	case activeStyle.Default:
+	case s.Styles.Default:
 		// Do nothinbg
-	case activeStyle.Plus:
+	case s.Styles.Plus:
 		rtn = []string{"+", "x"}
-	case activeStyle.Directions:
+	case s.Styles.Directions:
 		rtn = []string{"v", "<", "^", ">"}
-	case activeStyle.Dots:
+	case s.Styles.Dots:
 		rtn = []string{".   ", " .  ", "  . ", "   ."}
-	case activeStyle.Ball:
+	case s.Styles.Ball:
 		rtn = []string{"◐", "◓", "◑", "◒"}
-	case activeStyle.SquareClock:
+	case s.Styles.SquareClock:
 		rtn = []string{"◰", "◳", "◲", "◱"}
-	case activeStyle.Clock:
+	case s.Styles.Clock:
 		rtn = []string{"◴", "◷", "◶", "◵"}
-	case activeStyle.Snake:
+	case s.Styles.Snake:
 		rtn = []string{"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"}
-	case activeStyle.ChasingDots:
+	case s.Styles.ChasingDots:
 		rtn = []string{".  ", ".. ", "...", " ..", "  .", "   "}
-	case activeStyle.Arrows:
+	case s.Styles.Arrows:
 		rtn = []string{"←", "↖", "↑", "↗", "→", "↘", "↓", "↙"}
-	case activeStyle.Grow:
+	case s.Styles.Grow:
 		rtn = []string{"▁", "▃", "▄", "▅", "▆", "▇", "█", "▇", "▆", "▅", "▄", "▃"}
-	case activeStyle.Cross:
+	case s.Styles.Cross:
 		rtn = []string{"┤", "┘", "┴", "└", "├", "┌", "┬", "┐"}
-	case activeStyle.Flip:
+	case s.Styles.Flip:
 		rtn = []string{"_", "_", "_", "-", "`", "`", "'", "´", "-", "_", "_", "_"}
-	case activeStyle.Cylon:
+	case s.Styles.Cylon:
 		rtn = []string{"( ●    )",
 			"(  ●   )",
 			"(   ●  )",
@@ -131,7 +132,7 @@ func getFrames(style framesIndex) []string {
 			"(  ●   )",
 			"( ●    )",
 			"(●     )"}
-	case activeStyle.DirectionsSlow:
+	case s.Styles.DirectionsSlow:
 		rtn = []string{"<", "<", "∧", "∧", ">", ">", "v", "v"}
 	default:
 		rtn = []string{"-", "\\", "|", "/"}
