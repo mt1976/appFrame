@@ -1,34 +1,34 @@
 package logs
 
-import (
-	"github.com/sirupsen/logrus"
-)
+import "github.com/sirupsen/logrus"
 
 // Fields type, used to pass to `WithFields`.
 type Fields logrus.Fields
 
-// Info logs a message at level Info on the standard logger.
+// Info logs a message at level Info on the standard shared.logger.
 func Info(args ...interface{}) {
-	logrus.Info(args...)
+	this.logger.Info(args...)
 }
 
+// Information logs a message at level Info on the standard shared.logger.
+// Deprecated: Use Info instead
 func Information(args ...interface{}) {
 	Info(args...)
 }
 
-// Warn logs a message at level Warn on the standard logger.
+// Warn logs a message at level Warn on the standard shared.logger.
 func Warn(args ...interface{}) {
-	logrus.Warn(args...)
+	this.logger.Warn(args...)
 }
 
-// Trace logs a message at level Trace on the standard logger.
+// Trace logs a message at level Trace on the standard shared.logger.
 func Trace(args ...interface{}) {
-	logrus.Trace(args...)
+	this.logger.Trace(args...)
 }
 
-// Debug logs a message at level Debug on the standard logger.
+// Debug logs a message at level Debug on the standard shared.logger.
 func Debug(args ...interface{}) {
-	logrus.Debug(args...)
+	this.logger.Debug(args...)
 }
 
 // WithField creates an entry from the standard logger and adds a field to
@@ -37,7 +37,7 @@ func Debug(args ...interface{}) {
 // Note that it doesn't log until you call Debug, Print, Info, Warn, Fatal
 // or Panic on the Entry it returns.
 func WithField(key string, value interface{}) *logrus.Entry {
-	return logrus.WithField(key, value)
+	return this.logger.WithField(key, value)
 }
 
 // WithFields creates an entry from the standard logger and adds multiple
@@ -47,35 +47,58 @@ func WithField(key string, value interface{}) *logrus.Entry {
 // Note that it doesn't log until you call Debug, Print, Info, Warn, Fatal
 // or Panic on the Entry it returns.
 func WithFields(fields Fields) *logrus.Entry {
-	return logrus.WithFields(logrus.Fields(fields))
+	return this.logger.WithFields(logrus.Fields(fields))
 }
 
-// Panic logs a message at level Panic on the standard logger.
+// Panic logs a message at level Panic on the standard shared.logger.
 func Panic(args ...interface{}) {
-	logrus.Panic(args...)
+	this.logger.Panic(args...)
 }
 
 // Fatal logs a message at level Fatal on the standard logger then the process will exit with status set to 1.
 func Fatal(args ...interface{}) {
-	logrus.Fatal(args...)
+	this.logger.Fatal(args...)
 }
 
-// Warning logs a message at level Warn on the standard logger.
+// Warning logs a message at level Warn on the standard shared.logger.
 func Warning(args ...interface{}) {
-	logrus.Warning(args...)
+	this.logger.Warning(args...)
 }
 
-// Println logs a message at level Info on the standard logger.
+// Println logs a message at level Info on the standard shared.logger.
 func Println(args ...interface{}) {
-	logrus.Println(args...)
+	this.logger.Println(args...)
 }
 
-// Printf logs a message at level Info on the standard logger.
+// Printf logs a message at level Info on the standard shared.logger.
 func Printf(format string, args ...interface{}) {
-	logrus.Printf(format, args...)
+	this.logger.Printf(format, args...)
 }
 
-// Error logs a message at level Error on the standard logger.
+// Error logs a message at level Error on the standard shared.logger.
 func Error(args ...interface{}) {
-	logrus.Error(args...)
+	this.logger.Error(args...)
+}
+
+// ToFile sets the logging to file
+func ToFile(name string) {
+	toFile(name)
+}
+
+// ToConsole sets the logging to console
+func ToConsole() {
+	toConsole()
+}
+
+func ToFileAndConsole(name string) {
+	toFileAndConsole(name)
+}
+
+func Start() {
+	toConsole()
+	this.logger.Info("Logging Started")
+}
+
+func SetPath(path string) {
+	setPath(path)
 }
