@@ -101,6 +101,40 @@ func sBracket(s string) string {
 	return "[" + s + "]"
 }
 
+func dBracket(s string) string {
+	return "[[" + s + "]]"
+}
+
+// dChevrons wraps the string in double chevrons
+func dChevrons(s string) string {
+	return "<<" + s + ">>"
+}
+
+// sChevrons wraps the string in single chevrons
+func sChevrons(s string) string {
+	return "<" + s + ">"
+}
+
+// DCurlies wraps the string in double curlies
+func dCurlies(s string) string {
+	return "{{" + s + "}}"
+}
+
+// SCurlies wraps the string in single curlies
+func sCurlies(s string) string {
+	return "{" + s + "}"
+}
+
+// dParentheses wraps the string in double Parentheses
+func dParentheses(s string) string {
+	return "((" + s + "))"
+}
+
+// sParentheses wraps the string in single Parentheses
+func sParentheses(s string) string {
+	return "(" + s + ")"
+}
+
 // strArrayToStringWithSep converts a string array to a string using a given separator
 func strArrayToStringWithSep(inArray []string, inSep string) string {
 
