@@ -9,6 +9,8 @@ import (
 	xlogs "github.com/mt1976/appFrame/logs"
 )
 
+// The Copy function copies a file from one path to another and returns true if the copy was
+// successful.
 func Copy(fileName string, fromPath string, toPath string) bool {
 
 	xlogs.Warning("Copying " + fileName + " from " + fromPath + " to " + toPath)
@@ -30,6 +32,8 @@ func Copy(fileName string, fromPath string, toPath string) bool {
 	return true
 }
 
+// The Read function reads the content of a file given its name and path, and returns the content as a
+// string.
 func Read(fileName string, path string) (string, error) {
 	pwd, _ := os.Getwd()
 	filePath := pwd + "/" + fileName
@@ -53,6 +57,8 @@ func Read(fileName string, path string) (string, error) {
 	return string(content), err
 }
 
+// The Write function writes content to a file specified by fileName and path, and returns a boolean
+// indicating success and an error if any.
 func Write(fileName string, path string, content string) (bool, error) {
 	pwd, _ := os.Getwd()
 	filePath := pwd + "/" + fileName
@@ -70,6 +76,7 @@ func Write(fileName string, path string, content string) (bool, error) {
 	return false, nil
 }
 
+// The function `WriteData` writes the given content to a file with the specified name and path.
 func WriteData(fileName string, path string, content string) int {
 	pwd, _ := os.Getwd()
 	filePath := pwd + "/" + fileName
@@ -91,11 +98,14 @@ func WriteData(fileName string, path string, content string) int {
 }
 
 // Touch returns true if the specified file existing on the filesystem
+// The Touch function takes a filename as input and returns a boolean value indicating whether the file
+// was successfully touched.
 func Touch(filename string) bool {
 	return touch(filename)
 }
 
 // Empty clears the contents of a specified directory
+// The function "Empty" deletes all files in a given directory.
 func Empty(dir string) error {
 	xlogs.Println("TRASH", dir)
 	files, err := filepath.Glob(filepath.Join(dir, "*"))
@@ -115,6 +125,8 @@ func Empty(dir string) error {
 }
 
 // Load a Properties File
+// The function `GetPropertiesFile` loads a properties file and returns its contents as a map of
+// key-value pairs.
 func GetPropertiesFile(fileName string) (map[string]string, error) {
 	theseProperties := make(map[string]string)
 	//machineName, _ := os.Hostname()

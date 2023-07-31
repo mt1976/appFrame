@@ -8,6 +8,8 @@ import (
 )
 
 // SnoozeFor snoozes the application for a given amount of time
+// The function snooze takes in a polling interval as a string, converts it to an integer, and then
+// sleeps for that amount of time.
 func snooze(inPollingInterval string) {
 	pollingInterval, _ := strconv.Atoi(inPollingInterval)
 	xlogs.Printf("Snoooze... Zzzzzz.... %d seconds...", pollingInterval)

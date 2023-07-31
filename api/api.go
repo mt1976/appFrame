@@ -8,6 +8,7 @@ import (
 )
 
 // GetURLparam returns a selected parmeter value from the a given URI
+// The function `getURLparam` retrieves a specific parameter value from a given HTTP request URL.
 func getURLparam(r *http.Request, paramID string) string {
 	//fmt.Println(paramID)
 	//fmt.Println(r.URL)

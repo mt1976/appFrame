@@ -14,11 +14,9 @@ var EMAIL_From string
 var EMAIL_Footer string
 var Emailer *gomail.Dialer
 
+// The `const` block defines a set of constants used in the email package.
 const (
-	DATEMSG = "2006-01-02 at 15:04:05"
-)
-
-const (
+	DATEMSG    = "2006-01-02 at 15:04:05"
 	ES_FROM    = "From"
 	ES_TO      = "To"
 	ES_CC      = "Cc"
@@ -26,6 +24,7 @@ const (
 	ES_TYPE    = "text/html"
 )
 
+// The function initializes and returns a gomail.Dialer object for sending emails.
 func Email_init() *gomail.Dialer {
 	//fmt.Println("Email Init")
 
@@ -46,7 +45,10 @@ func Email_init() *gomail.Dialer {
 	return Emailer
 }
 
+// The function `SendEmail` sends an email with the specified recipient, subject, and body, using the
+// `gomail` package in Go.
 func SendEmail(to string, name string, subject string, body string) {
+	// The code block is creating a new email message using the `gomail` package.
 	m := gomail.NewMessage()
 	m.SetHeader(ES_FROM, EMAIL_From)
 	m.SetHeader(ES_TO, to)
@@ -58,6 +60,7 @@ func SendEmail(to string, name string, subject string, body string) {
 	//m.Attach("/home/Alex/lolcat.jpg")
 
 	// Send the email to Bob, Cora and Dan.
+	// This code block is sending the email using the `gomail` package.
 	if err := Emailer.DialAndSend(m); err != nil {
 		panic(err)
 	}

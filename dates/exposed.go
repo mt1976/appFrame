@@ -8,6 +8,7 @@ const (
 )
 
 // Convert time.Time to string
+// The function takes a time.Time object as input and returns a string representation of it.
 func ToString(t time.Time) string {
 	//fmt.Printf("t: %v\n", t)
 	return toString(t)
