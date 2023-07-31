@@ -4,6 +4,7 @@ import (
 	"io"
 	"os"
 	"os/user"
+	"strings"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -68,12 +69,9 @@ func setOutput(name string, both bool) {
 	}
 
 	// get current os user name
-	usr, err := user.Current()
-	if err != nil {
-		this.logger.Fatal(err)
-	}
+	username, err := getUserName()
 
-	filename := this.path + string(os.PathSeparator) + name + "_" + usr.Username + "_" + time.Now().Format("20060102") + ".log"
+	filename := this.path + string(os.PathSeparator) + name + "_" + username + "_" + time.Now().Format("20060102") + ".log"
 	this.logger.Warn("Logging to file: " + filename)
 
 	// Create a io.Writer instance
@@ -89,6 +87,32 @@ func setOutput(name string, both bool) {
 		return
 	}
 	this.logger.SetOutput(this.file)
+}
+
+func getUserName() (string, error) {
+	usr, err := user.Current()
+	if err != nil {
+		this.logger.Fatal(err)
+	}
+
+	user := usr.Username
+
+	// if username contains "\"" then return the last part
+
+	// The code `if len(user) > 0 && strings.Contains(user, "\")` checks if the length of the `user`
+	// string is greater than 0 and if it contains the backslash character "\".
+	if len(user) > 0 && strings.Contains(user, "\\") {
+		user = user[strings.LastIndex(user, "\\")+1:]
+	}
+
+	if len(user) == 0 {
+		user = usr.Name
+	}
+
+	if len(user) == 0 {
+		this.logger.Fatal("Could not get username")
+	}
+	return user, err
 }
 
 func setPath(path string) {
