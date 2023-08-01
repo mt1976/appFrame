@@ -7,8 +7,8 @@ import (
 )
 
 type XLogger struct {
-	log    logrus.Logger
-	Fields logrus.Fields
+	log logrus.Logger
+	//	Fields logrus.Fields
 	toDisk bool
 	file   io.Writer
 	path   string
@@ -16,7 +16,7 @@ type XLogger struct {
 }
 
 // Fields type, used to pass to `WithFields`.
-type Fields logrus.Fields
+type Fields map[string]interface{}
 
 // l is the internal logger
 func New() XLogger {
@@ -60,7 +60,11 @@ func (l *XLogger) WithField(key string, value interface{}) *logrus.Entry {
 // Note that it doesn't log until you call Debug, Print, Info, Warn, Fatal
 // or Panic on the Entry it returns.
 func (l *XLogger) WithFields(fields Fields) *logrus.Entry {
-	return l.log.WithFields(l.Fields)
+	x := make(logrus.Fields, len(fields))
+	for k, v := range fields {
+		x[k] = v
+	}
+	return l.log.WithFields(x)
 }
 
 // Panic logs a message at level Panic on the standard shared.logger.

@@ -67,5 +67,6 @@ func test() {
 	xlogs.Info("test")
 	xlogs.Info("fruit")
 	xlogs.Warning("test")
+	xlogs.WithFields(xlogger.Fields{"test": "test"}).Warning("test")
 	xlogs.Println("test")
 }
