@@ -1,6 +1,16 @@
 package fileio
 
-import "os"
+import (
+	"os"
+
+	xlogger "github.com/mt1976/appFrame/logs"
+)
+
+var xlogs xlogger.XLogger
+
+func init() {
+	xlogs = xlogger.New()
+}
 
 // FileExists returns true if the specified file existing on the filesystem
 func fileExists(filename string) bool {

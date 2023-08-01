@@ -7,7 +7,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
-	xlogs "github.com/mt1976/appFrame/logs"
+	xlogger "github.com/mt1976/appFrame/logs"
 )
 
 const (
@@ -20,6 +20,12 @@ const (
 	// wildcardClose is the close wildcard
 	wildcardClose = "}}"
 )
+
+var xlogs xlogger.XLogger
+
+func init() {
+	xlogs = xlogger.New()
+}
 
 // LowerFirst lowers the first character of a string
 func lowerFirst(s string) string {

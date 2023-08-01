@@ -4,17 +4,21 @@ import (
 	"strings"
 
 	xio "github.com/mt1976/appFrame/fileio"
-	xlogs "github.com/mt1976/appFrame/logs"
+	xlogger "github.com/mt1976/appFrame/logs"
 )
 
 // verbose is a flag to indicate verbose logging
 var verbose bool
+
+var xlogs xlogger.XLogger
 
 // translationData is a map of translations, shared by all instances of the translate package
 var translationData map[string]string
 
 // init loads the translate.dat file and sets verbose to false
 func init() {
+	xlogs = xlogger.New()
+	xlogs.ToFileAndConsole("translate")
 	translationData, _ = xio.GetPropertiesFile("translate.dat")
 	setVerbose(false)
 }
@@ -38,7 +42,7 @@ func get(in string) string {
 		} else {
 
 			if verboseLogging() {
-				xlogs.WithFields(xlogs.Fields{"using": in, "search": search, "alternate": search2}).Warn("No Translation")
+				xlogs.WithFields(xlogger.Fields{"using": in, "search": search, "alternate": search2}).Warn("No Translation")
 				//log.Println("TextGet: No Translation for ", in)
 			}
 
@@ -57,4 +61,11 @@ func setVerbose(v bool) {
 // verboseLogging returns the verbose flag
 func verboseLogging() bool {
 	return verbose
+}
+
+func test() {
+	xlogs.Info("test")
+	xlogs.Info("fruit")
+	xlogs.Warning("test")
+	xlogs.Println("test")
 }

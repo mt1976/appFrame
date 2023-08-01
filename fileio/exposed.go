@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/jimlawless/cfg"
-	xlogs "github.com/mt1976/appFrame/logs"
+	xlogger "github.com/mt1976/appFrame/logs"
 )
 
 // The Copy function copies a file from one path to another and returns true if the copy was
@@ -133,7 +133,7 @@ func GetPropertiesFile(fileName string) (map[string]string, error) {
 	// For docker - if can't find properties file (create one from the template properties file)
 	propertiesFileName := "config/" + fileName
 
-	xlogs.WithFields(xlogs.Fields{"File": fileName, "Path": propertiesFileName}).Info("Properties")
+	xlogs.WithFields(xlogger.Fields{"File": fileName, "Path": propertiesFileName}).Info("Properties")
 
 	err := cfg.Load(propertiesFileName, theseProperties)
 	if err != nil {

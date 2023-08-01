@@ -7,7 +7,7 @@ import (
 
 	"github.com/gregdel/pushover"
 	xenv "github.com/mt1976/appFrame/environment"
-	xlogs "github.com/mt1976/appFrame/logs"
+	xlogger "github.com/mt1976/appFrame/logs"
 	xsys "github.com/mt1976/appFrame/system"
 	"github.com/spf13/viper"
 )
@@ -16,6 +16,7 @@ var cTokens cConfig
 var cAppPort string
 var cHostName string
 var cAppName string
+var xlogs xlogger.XLogger
 
 type cConfig struct {
 	PushoverKey   string `mapstructure:"pushoverkey"`
@@ -28,6 +29,7 @@ func init() {
 	cHostName = xsys.Get().Hostname
 	cAppName = xenv.ApplicationName()
 	cAppPort = xenv.ApplicationHTTPPort()
+	xlogs = xlogger.New()
 }
 
 // The getConfig function reads a configuration file named "notifications.env" from the "config"

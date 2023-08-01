@@ -11,18 +11,10 @@ import (
 	prefixed "github.com/x-cray/logrus-prefixed-formatter"
 )
 
-type commondata struct {
-	logger logrus.Logger
-	toDisk bool
-	file   io.Writer
-	path   string
-}
+func new() XLogger {
 
-var this commondata
-
-func init() {
-
-	this.logger = *logrus.New()
+	newlog := XLogger{}
+	lr := *logrus.New()
 
 	logformat := &logrus.Logger{
 		Out:   os.Stderr,
@@ -34,36 +26,42 @@ func init() {
 			ForceFormatting: true,
 		},
 	}
-	this.toDisk = false
-	basePath, err := os.Getwd()
-	if err != nil {
-		this.logger.Fatal(err)
-	}
-	this.path = basePath
-	this.logger.SetFormatter(logformat.Formatter)
+	//this.toDisk = false
+	basePath, _ := os.Getwd()
+	//if err != nil {
+	//	this.logger.Fatal(err)
+	//}
+	//this.path = basePath
 
+	lr.SetFormatter(logformat.Formatter)
+	newlog.log = lr
+	newlog.path = basePath
+	newlog.toDisk = false
+
+	return newlog
 }
 
-func toFileAndConsole(name string) {
-	this.logger.WithField("name", name).Info("Logging to file and console")
-	this.toDisk = true
-	setOutput(name, true)
+func (l *XLogger) toFileAndConsole(name string) *XLogger {
+	l.log.WithField("name", name).Info("Logging to file and console")
+	l.toDisk = true
+	l.setOutput(name, true)
+	return l
 }
 
-func toConsole() {
-	this.logger.Info("Logging to Console")
-	this.toDisk = false
-	this.logger.SetOutput(os.Stdout)
+func (l *XLogger) toConsole() *XLogger {
+	l.log.Info("Logging to Console")
+	l.toDisk = false
+	l.log.SetOutput(os.Stdout)
+	return l
 }
 
-func toFile(name string) {
-	this.logger.WithField("name", name).Info("Logging to file")
-	this.toDisk = true
-	setOutput(name, false)
+func (l *XLogger) toFile(name string) {
+	l.log.WithField("name", name).Info("Logging to file")
+	l.toDisk = true
+	l.setOutput(name, false)
 }
 
-func setOutput(name string, both bool) {
-
+func (l *XLogger) setOutput(name string, both bool) *XLogger {
 	if name == "" {
 		name = "default"
 	}
@@ -71,28 +69,39 @@ func setOutput(name string, both bool) {
 	// get current os user name
 	username, err := getUserName()
 
-	filename := this.path + string(os.PathSeparator) + name + "_" + username + "_" + time.Now().Format("20060102") + ".log"
-	this.logger.Warn("Logging to file: " + filename)
+	filename := l.path + string(os.PathSeparator) + name + "_" + username + "_" + time.Now().Format("20060102") + ".log"
+	l.Warn("Logging to file: " + filename)
 
 	// Create a io.Writer instance
-	this.file, err = os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	l.file, err = os.OpenFile(filename, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
-		this.logger.Fatal(err)
+		l.Fatal(err)
+		return nil
 	}
 
 	if both {
 		// Create a new MultiWriter
-		mw := io.MultiWriter(os.Stdout, this.file)
-		this.logger.SetOutput(mw)
-		return
+		mw := io.MultiWriter(os.Stdout, l.file)
+		l.log.SetOutput(mw)
+		return l
 	}
-	this.logger.SetOutput(this.file)
+	l.log.SetOutput(l.file)
+	return l
+}
+
+func (l *XLogger) setPath(path string) *XLogger {
+	if path == "" {
+		path = "./"
+	}
+	l.path = path
+	l.log.WithField("path", path).Info("Logging path set")
+	return l
 }
 
 func getUserName() (string, error) {
 	usr, err := user.Current()
 	if err != nil {
-		this.logger.Fatal(err)
+		usr.Username = "unknown"
 	}
 
 	user := usr.Username
@@ -110,15 +119,7 @@ func getUserName() (string, error) {
 	}
 
 	if len(user) == 0 {
-		this.logger.Fatal("Could not get username")
+		user = "unknown"
 	}
 	return user, err
-}
-
-func setPath(path string) {
-	if path == "" {
-		path = "./"
-	}
-	this.path = path
-	this.logger.WithField("path", path).Info("Logging path set")
 }

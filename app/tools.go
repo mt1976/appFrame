@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"time"
 
-	xlogs "github.com/mt1976/appFrame/logs"
+	xlogger "github.com/mt1976/appFrame/logs"
 )
 
 // SnoozeFor snoozes the application for a given amount of time
@@ -12,6 +12,7 @@ import (
 // sleeps for that amount of time.
 func snooze(inPollingInterval string) {
 	pollingInterval, _ := strconv.Atoi(inPollingInterval)
+	xlogs := xlogger.New()
 	xlogs.Printf("Snoooze... Zzzzzz.... %d seconds...", pollingInterval)
 	time.Sleep(time.Duration(pollingInterval) * time.Second)
 }

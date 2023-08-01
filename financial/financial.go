@@ -2,7 +2,15 @@ package financial
 
 import (
 	"time"
+
+	xlogger "github.com/mt1976/appFrame/logs"
 )
+
+var xlogs xlogger.XLogger
+
+func init() {
+	xlogs = xlogger.New()
+}
 
 // The function wibbleDate adjusts the input date to the next weekday if it falls on a Saturday or
 // Sunday.

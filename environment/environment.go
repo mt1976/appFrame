@@ -5,8 +5,7 @@ import (
 	"strings"
 
 	xio "github.com/mt1976/appFrame/fileio"
-	"github.com/mt1976/appFrame/logs"
-	xlogs "github.com/mt1976/appFrame/logs"
+	xlogger "github.com/mt1976/appFrame/logs"
 	xsys "github.com/mt1976/appFrame/system"
 	xtl "github.com/mt1976/appFrame/translate"
 	"github.com/spf13/viper"
@@ -32,11 +31,13 @@ type environment struct {
 	AdditionalServicesList []string
 }
 
+var xlogs xlogger.XLogger
+
 // PATH: application\environment.go
 // Language: go
 
 func init() {
-
+	xlogs = xlogger.New()
 	Refresh()
 }
 
@@ -122,15 +123,15 @@ func getValue(prop map[string]string, inProperty string, what string) string {
 	rtn_var := prop[low_var]
 	env_var := "APP_" + strings.ToUpper(search)
 
-	logs.Information("GetApplicationProperty : " + low_var + " " + env_var)
+	xlogs.Info("GetApplicationProperty : " + low_var + " " + env_var)
 
 	env_value := os.Getenv(env_var)
 	if env_value != "" {
-		logs.Information(inProperty, rtn_var, env_var, env_value)
+		xlogs.Info(inProperty, rtn_var, env_var, env_value)
 		return env_value
 	}
 
-	logs.Information("GetApplicationProperty", rtn_var)
+	xlogs.Info("GetApplicationProperty", rtn_var)
 
 	return rtn_var
 }
@@ -159,13 +160,13 @@ func refresh() {
 }
 
 func debug() {
-	xlogs.WithFields(xlogs.Fields{"NAME": Name(), "VERSION": Version()}).Info(xtl.Get("Application"))
-	xlogs.WithFields(xlogs.Fields{"URI": DockerURI(), "PORT": DockerPort(), "PROTOCOL": DockerProtocol()}).Info(xtl.Get("Container"))
-	xlogs.WithFields(xlogs.Fields{"URI": URI(), "PORT": Port(), "PROTOCOL": Protocol()}).Info(xtl.Get("Application"))
+	xlogs.WithFields(xlogger.Fields{"NAME": Name(), "VERSION": Version()}).Info(xtl.Get("Application"))
+	xlogs.WithFields(xlogger.Fields{"URI": DockerURI(), "PORT": DockerPort(), "PROTOCOL": DockerProtocol()}).Info(xtl.Get("Container"))
+	xlogs.WithFields(xlogger.Fields{"URI": URI(), "PORT": Port(), "PROTOCOL": Protocol()}).Info(xtl.Get("Application"))
 	if xsys.IsRunningInDockerContainer() {
-		xlogs.WithFields(xlogs.Fields{"DOCKER": "true"}).Info(xtl.Get("Runtime"))
+		xlogs.WithFields(xlogger.Fields{"DOCKER": "true"}).Info(xtl.Get("Runtime"))
 	} else {
-		xlogs.WithFields(xlogs.Fields{"DOCKER": "false"}).Info(xtl.Get("Runtime"))
+		xlogs.WithFields(xlogger.Fields{"DOCKER": "false"}).Info(xtl.Get("Runtime"))
 
 	}
 }

@@ -12,16 +12,18 @@ import (
 	"github.com/dustin/go-humanize"
 	"github.com/jaypipes/ghw"
 	gInfo "github.com/matishsiao/goInfo"
-	xlogs "github.com/mt1976/appFrame/logs"
+	xlogger "github.com/mt1976/appFrame/logs"
 	xtl "github.com/mt1976/appFrame/translate"
 	"github.com/shirou/gopsutil/host"
 	"github.com/shirou/gopsutil/mem"
 )
 
+var xlogs xlogger.XLogger
+
 func init() {
 
 	SYSINFO, _ = gInfo.GetInfo()
-
+	xlogs = xlogger.New()
 }
 
 func get() SystemInfo {
@@ -51,8 +53,8 @@ func get() SystemInfo {
 	thisSystem.GPUInfo, _ = ghw.GPU()
 	//thisSystem.BIOSInfo, _ = ghw.BIOS()
 
-	xlogs.WithFields(xlogs.Fields{"User": thisSystem.UserName, "Home": thisSystem.UserHome, "Name": thisSystem.User}).Info(xtl.Get("user"))
-	xlogs.WithFields(xlogs.Fields{"Hostname": thisSystem.Hostname, "Uptime": thisSystem.Uptime, "CPU": thisSystem.CPU, "OS": thisSystem.OS, "Arch": thisSystem.Arch, "Kernel": thisSystem.Kernel, "Memory": thisSystem.Memory, "Network": thisSystem.Network, "Docker": thisSystem.Docker, "User": thisSystem.User, "GoVersion": thisSystem.GoVersion}).Info(xtl.Get("system"))
+	xlogs.WithFields(xlogger.Fields{"User": thisSystem.UserName, "Home": thisSystem.UserHome, "Name": thisSystem.User}).Info(xtl.Get("user"))
+	xlogs.WithFields(xlogger.Fields{"Hostname": thisSystem.Hostname, "Uptime": thisSystem.Uptime, "CPU": thisSystem.CPU, "OS": thisSystem.OS, "Arch": thisSystem.Arch, "Kernel": thisSystem.Kernel, "Memory": thisSystem.Memory, "Network": thisSystem.Network, "Docker": thisSystem.Docker, "User": thisSystem.User, "GoVersion": thisSystem.GoVersion}).Info(xtl.Get("system"))
 
 	//fmt.Printf("os.Environ(): %v\n", os.Environ())
 
@@ -118,7 +120,7 @@ func getArchInfo() string {
 func getDiskInfo() DiskInfo {
 	var thisDisk DiskInfo
 	thisDisk.Total, thisDisk.Free, thisDisk.Used = getDiskUsage()
-	xlogs.WithFields(xlogs.Fields{"Total": thisDisk.Total, "Free": thisDisk.Free, "Used": thisDisk.Used}).Info(xtl.Get("disk"))
+	xlogs.WithFields(xlogger.Fields{"Total": thisDisk.Total, "Free": thisDisk.Free, "Used": thisDisk.Used}).Info(xtl.Get("disk"))
 	return thisDisk
 }
 
@@ -132,7 +134,7 @@ func getNetworkInfo() NetworkInfo {
 	thisNetwork.IP = getIP()
 	thisNetwork.MAC = getMAC()
 	thisNetwork.Name = getNetworkName()
-	xlogs.WithFields(xlogs.Fields{"IP": thisNetwork.IP, "MAC": thisNetwork.MAC, "Name": thisNetwork.Name}).Info(xtl.Get("network"))
+	xlogs.WithFields(xlogger.Fields{"IP": thisNetwork.IP, "MAC": thisNetwork.MAC, "Name": thisNetwork.Name}).Info(xtl.Get("network"))
 	return thisNetwork
 }
 
@@ -196,7 +198,7 @@ func getMemoryInfo() MemoryInfo {
 	thisMemory.HumanFree = humanize.Bytes(thisMemory.Free)
 	thisMemory.HumanUsed = humanize.Bytes(thisMemory.Used)
 	thisMemory.HumanUsedPercent = fmt.Sprint(thisMemory.UsedPercent) + "%"
-	xlogs.WithFields(xlogs.Fields{"Total": thisMemory.HumanTotal, "Free": thisMemory.HumanFree, "Used": thisMemory.HumanUsed, "UsedPercent": thisMemory.HumanUsedPercent}).Info(xtl.Get("memory"))
+	xlogs.WithFields(xlogger.Fields{"Total": thisMemory.HumanTotal, "Free": thisMemory.HumanFree, "Used": thisMemory.HumanUsed, "UsedPercent": thisMemory.HumanUsedPercent}).Info(xtl.Get("memory"))
 	return thisMemory
 }
 
