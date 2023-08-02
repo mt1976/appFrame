@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/leekchan/accounting"
+	xmock "github.com/mt1976/appFrame/mock"
 )
 
 // The function AbbrToInt converts a string representation of a number with abbreviations (such as "1M"
@@ -71,11 +72,11 @@ func GetFirstDayOfYear(inTime time.Time) time.Time {
 // FormatAmount returns a formated string version of a CCY amount
 // The function takes an amount and currency code as input, formats the amount with the specified
 // currency symbol and precision, and returns the formatted amount as a string.
-func FormatAmount(inAmount string, inCCY string) string {
-	ac := accounting.Accounting{Symbol: inCCY, Precision: 2, Format: "%v", FormatNegative: "-%v", FormatZero: "\u2013 ;\u2013"}
-	bum, _ := strconv.ParseFloat(inAmount, 64)
-	return ac.FormatMoney(bum)
-}
+//func FormatAmount(inAmount string, inCCY string) string {
+//	ac := accounting.Accounting{Symbol: inCCY, Precision: 2, Format: "%v", FormatNegative: "-%v", FormatZero: "\u2013 ;\u2013"}
+//	bum, _ := strconv.ParseFloat(inAmount, 64)
+//	return ac.FormatMoney(bum)
+//}
 
 // FormatAmountFullDPS returns a formated string version of a CCY amount to 7dps
 // The function takes an amount and currency code as input, formats the amount with the specified
@@ -95,4 +96,23 @@ func FormatAmountToDPS(inAmount string, inCCY string, inPrec string) string {
 	ac := accounting.Accounting{Symbol: inCCY, Precision: prec, Format: "%v", FormatNegative: "-%v", FormatZero: "\u2013 \u2013"}
 	bum, _ := strconv.ParseFloat(inAmount, 64)
 	return ac.FormatMoney(bum)
+}
+
+func FormatAmount(inAmount float64, inCCY string) string {
+	ccyInfo, err := xmock.GetCurrencyInfo(inCCY)
+	if err != nil {
+		xlogs.Panic(err.Error())
+	}
+	ac := accounting.Accounting{Symbol: ccyInfo.Character, Precision: ccyInfo.DPS, Format: "%v", FormatNegative: "-%v", FormatZero: "\u2013 \u2013"}
+	return ac.FormatMoney(inAmount)
+}
+
+func SettlementDate(major string, minor string, pivotDate time.Time) (time.Time, error) {
+	rtn, err := settlementDate(major, minor, pivotDate)
+	return rtn, err
+}
+
+func SettlementDateVia(major string, minor string, pivotDate time.Time, via string) (time.Time, error) {
+	rtn, err := settlementDateVia(major, minor, via, pivotDate)
+	return rtn, err
 }
