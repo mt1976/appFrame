@@ -69,7 +69,7 @@ func getSettlementDaysCROSS(ccy1 string, via string, ccy2 string) (int, error) {
 	return xmath.Max(days1, days2), nil
 }
 
-func getSettlementDateCCY(ccy1 string, inDate time.Time) (time.Time, error) {
+func getSettlementDateCCY(ccy1 string, tradeDate time.Time) (time.Time, error) {
 	// Calculate the settlement days
 
 	days, err := getSettlementDaysCCY(ccy1)
@@ -78,10 +78,10 @@ func getSettlementDateCCY(ccy1 string, inDate time.Time) (time.Time, error) {
 	}
 
 	// Adjust the date
-	return adjustSettlementForWeekends(inDate.AddDate(0, 0, days)), nil
+	return adjustSettlementForWeekends(tradeDate.AddDate(0, 0, days)), nil
 }
 
-func getSettlementDatePAIR(ccy1 string, ccy2 string, inDate time.Time) (time.Time, error) {
+func getSettlementDatePAIR(ccy1 string, ccy2 string, tradeDate time.Time) (time.Time, error) {
 	// Calculate the settlement days
 	days, err := getSettlementDaysPAIR(ccy1, ccy2)
 	if err != nil {
@@ -89,10 +89,10 @@ func getSettlementDatePAIR(ccy1 string, ccy2 string, inDate time.Time) (time.Tim
 	}
 
 	// Adjust the date
-	return adjustSettlementForWeekends(inDate.AddDate(0, 0, days)), nil
+	return adjustSettlementForWeekends(tradeDate.AddDate(0, 0, days)), nil
 }
 
-func getSettlementDateCROSS(ccy1 string, via string, ccy2 string, inDate time.Time) (time.Time, error) {
+func getSettlementDateCROSS(ccy1 string, via string, ccy2 string, tradeDate time.Time) (time.Time, error) {
 	// Calculate the settlement days
 	days, err := getSettlementDaysCROSS(ccy1, via, ccy2)
 	if err != nil {
@@ -100,5 +100,5 @@ func getSettlementDateCROSS(ccy1 string, via string, ccy2 string, inDate time.Ti
 	}
 
 	// Adjust the date
-	return adjustSettlementForWeekends(inDate.AddDate(0, 0, days)), nil
+	return adjustSettlementForWeekends(tradeDate.AddDate(0, 0, days)), nil
 }

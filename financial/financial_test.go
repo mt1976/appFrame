@@ -95,3 +95,31 @@ func Test_settlementDate(t *testing.T) {
 		})
 	}
 }
+
+func Test_getSettlementDateCCY(t *testing.T) {
+	type args struct {
+		ccy1   string
+		inDate time.Time
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    time.Time
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+		{"EUR", args{"EUR", time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC)}, time.Date(2019, 1, 3, 0, 0, 0, 0, time.UTC), false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := getSettlementDateCCY(tt.args.ccy1, tt.args.inDate)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("getSettlementDateCCY() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("getSettlementDateCCY() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

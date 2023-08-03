@@ -33,23 +33,8 @@ func (I *ISIN) IsValid() bool {
 		log.Printf("[WARN] ISIN prefix not a valid country code (%v)\n", countryCode)
 		return false
 	}
-
-	//fmt.Printf("ISIN: %s\n", I.Printable())
-
-	// Verify the ISIN format using a regular expression (optional)
-	// Implement a regular expression here to match the ISIN format if needed.
-
-	// Calculate the ISIN checksum
-	//checksum := I.calculateChecksum()
-
-	// Compare the calculated checksum with the checksum provided in the ISIN
-
-	//firstTwelve := val[:11]
 	checksum, _ := strconv.Atoi(val[11:])
-	//checksum := checksumarray[11]
-	//fmt.Printf("First : %s Last %v\n", firstTwelve, checksum)
 	rtnVal := I.calculateChecksum() == checksum
-	//fmt.Printf("Checksum: Printable[%s] Prefix[%v] Checksum[%v] Calculated[%v] Eval[%v]\n", I.Printable(), firstTwelve, checksum, I.calculateChecksum(), I.calculateChecksum() == checksum)
 
 	return rtnVal
 }
@@ -58,9 +43,12 @@ func (I *ISIN) String() string {
 	return I.Get()
 }
 
-func (I *ISIN) Set(in string) {
+func (I *ISIN) Set(in string) error {
 	I.value = in
-	//return I
+	if !I.IsValid() {
+		return fmt.Errorf("invalid ISIN [%s]", in)
+	}
+	return nil
 }
 
 func (I *ISIN) Get() string {

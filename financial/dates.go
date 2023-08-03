@@ -4,68 +4,51 @@ import (
 	"fmt"
 	"strconv"
 	"time"
-	"unicode"
 )
 
-func validateAndFormatTerm(term string) (string, error) {
-	//Validates that the term string is valid
-	// Validation is that the string is at least 2 characters long, and the last character is a valid unit
-	// i.e. D, W, M, Y
-	if len(term) < 2 {
-		return "", fmt.Errorf("invalid term: %s", term)
-	}
-	unit := term[len(term)-1]
-	unit = byte(unicode.ToUpper(rune(unit)))
-	factor := term[:len(term)-1]
-
-	_, err := strconv.Atoi(factor)
-	if err != nil {
-		return "", fmt.Errorf("Supplied value %s is not a number\n", factor)
-	}
-
-	clean := fmt.Sprintf("%s%c", factor, unit)
-
-	switch unit {
-	case 'D':
-		return clean, nil
-	case 'W':
-		return clean, nil
-	case 'M':
-		return clean, nil
-	case 'Y':
-		return clean, nil
-	default:
-		return "", fmt.Errorf("invalid term unit: %c", unit)
-	}
-}
-
-func getTenorDateCCY(inTerm string, ccy string) (time.Time, error) {
+func getTenorDateCCY(tenor Tenor, tradeDate time.Time, ccy string) (time.Time, error) {
 	// Calculate the settlement days, and adjust the date based on the term string provided i.e. 1D, 1W, 1M, 1Y
 
-	inTerm, termError := validateAndFormatTerm(inTerm)
-	if termError != nil {
-		return time.Now(), termError
-	}
-
-	spotDate, spotError := getSettlementDateCCY(ccy, time.Now())
+	spotDays, spotError := getSettlementDaysCCY(ccy)
 	if spotError != nil {
 		return time.Now(), spotError
 	}
-	days, err := bankingTermToDuration(inTerm)
+
+	if tenor.term == "SP" {
+		return tradeDate.AddDate(0, 0, spotDays), nil
+	}
+	if tenor.term == "ON" {
+		return tradeDate.AddDate(0, 0, spotDays+1), nil
+	}
+	if tenor.term == "TD" {
+		return tradeDate, nil
+	}
+
+	dura, err := tenorToDuration(tenor)
 	if err != nil {
 		return time.Now(), err
 	}
-	return spotDate.Add(days), nil
+
+	rtn := tradeDate.AddDate(0, 0, spotDays)
+	rtn = rtn.Add(dura)
+
+	return rtn, nil
 }
 
-func getTenorDateCCYPAIR(inTerm string, ccy1 string, ccy2 string) (time.Time, error) {
+func getTenorDateCCYPAIR(tenor Tenor, tradeDate time.Time, ccy1 string, ccy2 string) (time.Time, error) {
 	// Calculate the settlement days, and adjust the date based on the term string provided i.e. 1D, 1W, 1M, 1Y
 	return time.Now(), nil
 }
 
-func bankingTermToDuration(term string) (time.Duration, error) {
+func getTenorDateCCYCROSS(tenor Tenor, tradeDate time.Time, ccy1 string, via string, ccy2 string) (time.Time, error) {
+	// Calculate the settlement days, and adjust the date based on the term string provided i.e. 1D, 1W, 1M, 1Y
+	return time.Now(), nil
+}
+
+func tenorToDuration(tenor Tenor) (time.Duration, error) {
+	term := tenor.String()
 	if len(term) < 2 {
-		return 0, fmt.Errorf("invalid term: %s", term)
+		return 0, fmt.Errorf("invalid term length [%s]", term)
 	}
 
 	valueStr := term[:len(term)-1]
@@ -73,7 +56,7 @@ func bankingTermToDuration(term string) (time.Duration, error) {
 
 	value, err := strconv.Atoi(valueStr)
 	if err != nil {
-		return 0, fmt.Errorf("invalid term: %s", term)
+		return 0, fmt.Errorf("invalid term prefix [%s]", term)
 	}
 
 	switch unit {
