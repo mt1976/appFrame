@@ -22,7 +22,7 @@ func Test_settlementDays(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := settlementDays(tt.args.ccy1, tt.args.ccy2)
+			got, err := getSettlementDaysPAIR(tt.args.ccy1, tt.args.ccy2)
 			if err != nil {
 				t.Errorf("settlementDays() error = %v", err)
 				return
@@ -51,7 +51,7 @@ func Test_settlementDaysVia(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := settlementDaysVia(tt.args.ccy1, tt.args.via, tt.args.ccy2)
+			got, err := getSettlementDaysCROSS(tt.args.ccy1, tt.args.via, tt.args.ccy2)
 			if err != nil {
 				t.Errorf("settlementDaysVia() error = %v", err)
 				return
@@ -84,7 +84,7 @@ func Test_settlementDate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := settlementDate(tt.args.ccy1, tt.args.ccy2, tt.args.inDate)
+			got, err := getSettlementDatePAIR(tt.args.ccy1, tt.args.ccy2, tt.args.inDate)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("settlementDate() error = %v, wantErr %v", err, tt.wantErr)
 				return

@@ -49,7 +49,7 @@ func AbbrToInt(str string) int {
 // The function "GetSpotDate" takes a time input and returns a modified time value.
 func GetSpotDate(inTime time.Time) time.Time {
 	spot := inTime.AddDate(0, 0, 2)
-	return wibbleDate(spot)
+	return adjustSettlementForWeekends(spot)
 }
 
 // CalculateSpotDate(inTime invalid type)
@@ -58,7 +58,7 @@ func GetSpotDate(inTime time.Time) time.Time {
 func GetTenorDate(inTime time.Time, inMonth string) time.Time {
 	month, _ := strconv.Atoi(inMonth)
 	spot := inTime.AddDate(0, month, 0)
-	return wibbleDate(spot)
+	return adjustSettlementForWeekends(spot)
 }
 
 // The function "GetFirstDayOfYear" returns the first day of the year, assuming that January 1st is a
@@ -66,7 +66,7 @@ func GetTenorDate(inTime time.Time, inMonth string) time.Time {
 func GetFirstDayOfYear(inTime time.Time) time.Time {
 	// Assuking 1st Jan is a holiday therefore first day is 2, then wibble the date.
 	tempDate := time.Date(inTime.Year(), 1, 2, 0, 0, 0, inTime.Nanosecond(), inTime.Location())
-	return wibbleDate(tempDate)
+	return adjustSettlementForWeekends(tempDate)
 }
 
 // FormatAmount returns a formated string version of a CCY amount
@@ -108,11 +108,11 @@ func FormatAmount(inAmount float64, inCCY string) string {
 }
 
 func SettlementDate(major string, minor string, pivotDate time.Time) (time.Time, error) {
-	rtn, err := settlementDate(major, minor, pivotDate)
+	rtn, err := getSettlementDatePAIR(major, minor, pivotDate)
 	return rtn, err
 }
 
 func SettlementDateVia(major string, minor string, pivotDate time.Time, via string) (time.Time, error) {
-	rtn, err := settlementDateVia(major, minor, via, pivotDate)
+	rtn, err := getSettlementDateCROSS(major, minor, via, pivotDate)
 	return rtn, err
 }
