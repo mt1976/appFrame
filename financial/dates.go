@@ -4,7 +4,19 @@ import (
 	"fmt"
 	"strconv"
 	"time"
+
+	xmock "github.com/mt1976/appFrame/mock"
 )
+
+type Date struct {
+	Code     string
+	Name     string
+	Date     time.Time
+	Sort     int
+	Simple   string
+	External string
+	Human    string
+}
 
 func getTenorDateCCY(tenor Tenor, tradeDate time.Time, ccy string) (time.Time, error) {
 	// Calculate the settlement days, and adjust the date based on the term string provided i.e. 1D, 1W, 1M, 1Y
@@ -14,11 +26,22 @@ func getTenorDateCCY(tenor Tenor, tradeDate time.Time, ccy string) (time.Time, e
 		return time.Now(), spotError
 	}
 
+	if !xmock.IsValidPeriod(tenor.String()) {
+		return time.Now(), fmt.Errorf("invalid tenor [%s]", tenor.String())
+	}
+
+	// Get ladder
+	//ladder := xmock.GetRateLadderList()
+	//fmt.Printf("ladder: %v\n", ladder)
+
 	if tenor.term == "SP" {
 		return tradeDate.AddDate(0, 0, spotDays), nil
 	}
 	if tenor.term == "ON" {
-		return tradeDate.AddDate(0, 0, spotDays+1), nil
+		return tradeDate.AddDate(0, 0, spotDays-1), nil
+	}
+	if tenor.term == "TN" {
+		return tradeDate.AddDate(0, 0, 1), nil
 	}
 	if tenor.term == "TD" {
 		return tradeDate, nil
@@ -71,4 +94,35 @@ func tenorToDuration(tenor Tenor) (time.Duration, error) {
 	default:
 		return 0, fmt.Errorf("invalid term unit: %c", unit)
 	}
+}
+
+func getLadder(ccy string, pivotDate time.Time) []Date {
+	var DateList []Date
+	rateLadder := xmock.RateLadderInfoMap
+	xmock.RateValueToString(rateLadder)
+	fmt.Printf("rateLadder: %v\n", rateLadder)
+	fmt.Printf("ccy: %v\n", ccy)
+	fmt.Printf("pivotDate: %v\n", pivotDate.Format("2006-01-02"))
+	// range over the ladder
+	for _, ladder := range rateLadder {
+		thisTenor, err := NewTenor(ladder.Code)
+		if err != nil {
+			fmt.Printf("Error [%v]\n", err)
+		}
+		date, err := getTenorDateCCY(thisTenor, pivotDate, ccy)
+		if err != nil {
+			fmt.Printf("Error [%v]\n", err)
+		}
+		fmt.Printf("thisTenor: [%v] [%v] -> [%v]\n", ladder.Code, thisTenor.String(), date.Format("2006-01-02"))
+		di := Date{}
+		di.Code = ladder.Code
+		di.Name = ladder.Name
+		di.Date = date
+		di.Sort = ladder.Index
+		di.Simple = date.Format("01/02/2006")
+		di.External = date.Format("2006-01-02")
+		di.Human = date.Format("Mon 02 Jan 2006")
+		DateList = append(DateList, di)
+	}
+	return DateList
 }

@@ -50,8 +50,9 @@ func Test_getTenorDateCCY(t *testing.T) {
 		tradeDate time.Time
 		ccy       string
 	}
-	SP, _ := NewTenor("SP")
-	TD, _ := NewTenor("TD")
+	TSP, _ := NewTenor("SP")
+	TTD, _ := NewTenor("TD")
+	T1M, _ := NewTenor("1M")
 
 	tests := []struct {
 		name    string
@@ -61,9 +62,10 @@ func Test_getTenorDateCCY(t *testing.T) {
 	}{
 		// TODO: Add test cases.
 
-		{"SPUSD", args{SP, time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), "USD"}, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), false},
-		{"SPEUR", args{SP, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), "EUR"}, time.Date(2019, 1, 4, 0, 0, 0, 0, time.UTC), false},
-		{"TDEUR", args{TD, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), "EUR"}, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), false},
+		{"SPUSD", args{TSP, time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), "USD"}, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), false},
+		{"SPEUR", args{TSP, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), "EUR"}, time.Date(2019, 1, 4, 0, 0, 0, 0, time.UTC), false},
+		{"TDEUR", args{TTD, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), "EUR"}, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), false},
+		{"1MGBP", args{T1M, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), "GBP"}, time.Date(2019, 2, 3, 0, 0, 0, 0, time.UTC), false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -76,6 +78,26 @@ func Test_getTenorDateCCY(t *testing.T) {
 				t.Errorf("getTenorDateCCY() = %v, want %v", got, tt.want)
 			}
 			t.Logf("getTenorDateCCY() = %v, want %v", got, tt.want)
+		})
+	}
+}
+
+func Test_getLadder(t *testing.T) {
+	type args struct {
+		ccy       string
+		pivotDate time.Time
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		{"USD", args{"USD", time.Date(2023, 4, 26, 0, 0, 0, 0, time.UTC)}},
+		{"GBP", args{"GBP", time.Date(2023, 4, 26, 0, 0, 0, 0, time.UTC)}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			dl := getLadder(tt.args.ccy, tt.args.pivotDate)
+			t.Logf("getLadder() = %v", dl)
 		})
 	}
 }

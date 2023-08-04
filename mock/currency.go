@@ -71,7 +71,7 @@ func GetCurrencyInfo(code string) (CurrencyInfo, error) {
 		log.Printf("[WARN] Invalid currency code: [%s]", code)
 		return CurrencyInfo{}, fmt.Errorf("invalid currency code: [%s]", code)
 	}
-	fmt.Printf("CurrencyInfo: %v Age %v years\n", rtn, rtn.Age())
+	//fmt.Printf("CurrencyInfo: %v Age %v years\n", rtn, rtn.Age())
 	return rtn, nil
 }
 

@@ -16,9 +16,11 @@ require (
 )
 
 require (
+	github.com/bradfitz/slice v0.0.0-20180809154707-2b758aa73013 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/nxadm/tail v1.4.8 // indirect
 	github.com/trisacrypto/lei v1.0.0 // indirect
+	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
 	golang.org/x/net v0.12.0 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 )

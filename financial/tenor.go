@@ -49,8 +49,8 @@ func validateAndFormatTenor(tenor string) (string, error) {
 
 	// Deal with special cases of SP and TD
 	uTerm := strings.ToUpper(tenor)
-	// Special cases SP, TD
-	if uTerm == "SP" || uTerm == "TD" {
+	// Special cases SP, TD, ON, TN
+	if uTerm == "SP" || uTerm == "TD" || uTerm == "ON" || uTerm == "TN" || uTerm == "SN" {
 		return uTerm, nil
 	}
 
