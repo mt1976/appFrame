@@ -66,6 +66,7 @@ func Test_getTenorDateCCY(t *testing.T) {
 		{"SPEUR", args{TSP, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), "EUR"}, time.Date(2019, 1, 4, 0, 0, 0, 0, time.UTC), false},
 		{"TDEUR", args{TTD, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), "EUR"}, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), false},
 		{"1MGBP", args{T1M, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), "GBP"}, time.Date(2019, 2, 3, 0, 0, 0, 0, time.UTC), false},
+		{"SPMXN", args{TSP, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), "MXN"}, time.Date(2019, 1, 5, 0, 0, 0, 0, time.UTC), false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
