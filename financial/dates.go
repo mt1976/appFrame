@@ -18,6 +18,14 @@ type Date struct {
 	Human    string
 }
 
+func getTenorDate(tenor Tenor, tradeDate time.Time, ccy ...string) (time.Time, error) {
+	return time.Now(), nil
+}
+
+func getTenorDateTEST(tenor Tenor, tradeDate time.Time, ccy ...xmock.Currency) (time.Time, error) {
+	return time.Now(), nil
+}
+
 func getTenorDateCCY(tenor Tenor, tradeDate time.Time, ccy string) (time.Time, error) {
 	// Calculate the settlement days, and adjust the date based on the term string provided i.e. 1D, 1W, 1M, 1Y
 
@@ -96,7 +104,7 @@ func tenorToDuration(tenor Tenor) (time.Duration, error) {
 	}
 }
 
-func getLadder(ccy string, pivotDate time.Time) []Date {
+func getLadderCCY(pivotDate time.Time, ccy string) []Date {
 	var DateList []Date
 	rateLadder := xmock.RateLadderInfoMap
 	xmock.RateValueToString(rateLadder)
@@ -125,4 +133,29 @@ func getLadder(ccy string, pivotDate time.Time) []Date {
 		DateList = append(DateList, di)
 	}
 	return DateList
+}
+
+func getLadder(pivotdate time.Time, ccy ...string) []Date {
+	// TODO - this is a stub, please write logic
+	return nil
+}
+
+func getTenorFromDateCCY(inDate, pivotDate time.Time, ccy string) (Tenor, error) {
+	// TODO - this is a stub, please write logic
+	return Tenor{}, nil
+}
+
+func getTenorFromDateCCYPAIR(inDate, pivotDate time.Time, ccy1 string, ccy2 string) (Tenor, error) {
+	// TODO - this is a stub, please write logic
+	return Tenor{}, nil
+}
+
+func getTenorFromDateCCYCROSS(inDate, pivotDate time.Time, ccy1 string, via string, ccy2 string) (Tenor, error) {
+	// TODO - this is a stub, please write logic
+	return Tenor{}, nil
+}
+
+func getTenorFromDate(inDate, pivotDate time.Time, ccy ...string) (Tenor, error) {
+	// TODO - this is a stub, please write logic
+	return Tenor{}, nil
 }

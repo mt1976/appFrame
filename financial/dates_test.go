@@ -97,7 +97,7 @@ func Test_getLadder(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dl := getLadder(tt.args.ccy, tt.args.pivotDate)
+			dl := getLadderCCY(tt.args.pivotDate, tt.args.ccy)
 			t.Logf("getLadder() = %v", dl)
 		})
 	}

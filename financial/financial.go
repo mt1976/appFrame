@@ -29,7 +29,7 @@ func adjustSettlementForWeekends(inDate time.Time) time.Time {
 func getSettlementDaysCCY(ccy1 string) (int, error) {
 
 	// Validate the two currencues using the mock package
-	days1, err := xmock.GetCurrencyInfo(ccy1)
+	days1, err := xmock.GetCurrency(ccy1)
 	if err != nil {
 		xlogs.WithFields(xlogger.Fields{"CCY": ccy1, "ERROR": err.Error()}).Warn("Settlement Days Issue")
 		return -1, err

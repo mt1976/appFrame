@@ -99,7 +99,7 @@ func FormatAmountToDPS(inAmount string, inCCY string, inPrec string) string {
 }
 
 func FormatAmount(inAmount float64, inCCY string) string {
-	ccyInfo, err := xmock.GetCurrencyInfo(inCCY)
+	ccyInfo, err := xmock.GetCurrency(inCCY)
 	if err != nil {
 		xlogs.Panic(err.Error())
 	}
