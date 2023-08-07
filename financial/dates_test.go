@@ -115,10 +115,17 @@ func Test_getTenorDate(t *testing.T) {
 		want    time.Time
 		wantErr bool
 	}{
-		// TODO: Add test cases.
-		{"SPUSD", args{Tenor{"SP"}, time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"USD"}}, time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), false},
-		{"SPEUR", args{Tenor{"SP"}, time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"EUR", "USD"}}, time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), false},
-		{"SPEUR", args{Tenor{"SP"}, time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"EUR", "GBP", "USD"}}, time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), false},
+		{"SPUSD", args{Tenor{"SP"}, time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"USD"}}, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), false},
+		{"TDUSD", args{Tenor{"TD"}, time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"USD"}}, time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), false},
+		{"SPGBPUSD", args{Tenor{"SP"}, time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"GBP", "USD"}}, time.Date(2019, 1, 3, 0, 0, 0, 0, time.UTC), false},
+		{"SPEURZARvUSD", args{Tenor{"SP"}, time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"EUR", "ZAR", "USD"}}, time.Date(2019, 1, 3, 0, 0, 0, 0, time.UTC), false},
+		{"SPMXN", args{Tenor{"SP"}, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), []string{"MXN"}}, time.Date(2019, 1, 5, 0, 0, 0, 0, time.UTC), false},
+		{"SPMXNvUSD", args{Tenor{"SP"}, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), []string{"MXN", "USD"}}, time.Date(2019, 1, 5, 0, 0, 0, 0, time.UTC), false},
+		{"SPMXNvUSDEUR", args{Tenor{"SP"}, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), []string{"MXN", "USD", "EUR"}}, time.Date(2019, 1, 5, 0, 0, 0, 0, time.UTC), false},
+		{"TDGBP", args{Tenor{"TD"}, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), []string{"GBP"}}, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), false},
+		{"1MGBPvUSD", args{Tenor{"1M"}, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), []string{"GBP", "USD"}}, time.Date(2019, 2, 3, 0, 0, 0, 0, time.UTC), false},
+		{"1YGBPvUSD", args{Tenor{"1Y"}, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), []string{"GBP", "USD"}}, time.Date(2020, 1, 4, 0, 0, 0, 0, time.UTC), false},
+		{"1YUSDvCAD", args{Tenor{"1Y"}, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), []string{"USD", "CAD"}}, time.Date(2020, 1, 3, 0, 0, 0, 0, time.UTC), false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

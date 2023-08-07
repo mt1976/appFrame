@@ -19,13 +19,46 @@ type Date struct {
 }
 
 func getTenorDate(tenor Tenor, tradeDate time.Time, ccy ...string) (time.Time, error) {
+
+	fmt.Printf("Tenor [%v] Trade Date [%v] Ccys %v [%v]\n", tenor.String(), tradeDate.Format("2006-01-02"), ccy, len(ccy))
+
 	// Calculate the settlement days, and adjust the date based on the term string provided i.e. 1D, 1W, 1M, 1Y
 	// loop thgouth currencies
-	fmt.Printf("No Currency Provided [%v]\n", len(ccy))
-	for _, c := range ccy {
-		fmt.Printf("ccy: %v\n", c)
+
+	if !xmock.IsValidPeriod(tenor.String()) {
+		return time.Now(), fmt.Errorf("invalid tenor [%s]", tenor.String())
 	}
-	return tradeDate, nil
+
+	spotDays := 0
+
+	for _, c := range ccy {
+		ccySpot, spotError := getSettlementDaysCCY(c)
+		if spotError != nil {
+			return time.Now(), spotError
+		}
+		if ccySpot > spotDays {
+			spotDays = ccySpot
+		}
+	}
+
+	switch tenor.term {
+	case "SP":
+		return tradeDate.AddDate(0, 0, spotDays), nil
+	case "ON":
+		return tradeDate.AddDate(0, 0, spotDays-1), nil
+	case "TN":
+		return tradeDate.AddDate(0, 0, 1), nil
+	case "TD":
+		return tradeDate, nil
+	}
+
+	tenorPeriod, err := tenorToDuration(tenor)
+	if err != nil {
+		return time.Now(), err
+	}
+
+	rtn := tradeDate.AddDate(0, 0, spotDays).Add(tenorPeriod)
+	return rtn, nil
 }
 
 func getTenorDateTEST(tenor Tenor, tradeDate time.Time, ccy ...xmock.Currency) (time.Time, error) {
@@ -49,16 +82,16 @@ func getTenorDateCCY(tenor Tenor, tradeDate time.Time, ccy string) (time.Time, e
 	//fmt.Printf("ladder: %v\n", ladder)
 
 	if tenor.term == "SP" {
-		return tradeDate.AddDate(0, 0, spotDays), nil
+		return adjustSettlementForWeekends(tradeDate.AddDate(0, 0, spotDays)), nil
 	}
 	if tenor.term == "ON" {
-		return tradeDate.AddDate(0, 0, spotDays-1), nil
+		return adjustSettlementForWeekends(tradeDate.AddDate(0, 0, spotDays-1)), nil
 	}
 	if tenor.term == "TN" {
-		return tradeDate.AddDate(0, 0, 1), nil
+		return adjustSettlementForWeekends(tradeDate.AddDate(0, 0, 1)), nil
 	}
 	if tenor.term == "TD" {
-		return tradeDate, nil
+		return adjustSettlementForWeekends(tradeDate), nil
 	}
 
 	dura, err := tenorToDuration(tenor)
@@ -67,19 +100,9 @@ func getTenorDateCCY(tenor Tenor, tradeDate time.Time, ccy string) (time.Time, e
 	}
 
 	rtn := tradeDate.AddDate(0, 0, spotDays)
-	rtn = rtn.Add(dura)
+	rtn = adjustSettlementForWeekends(rtn.Add(dura))
 
 	return rtn, nil
-}
-
-func getTenorDateCCYPAIR(tenor Tenor, tradeDate time.Time, ccy1 string, ccy2 string) (time.Time, error) {
-	// Calculate the settlement days, and adjust the date based on the term string provided i.e. 1D, 1W, 1M, 1Y
-	return time.Now(), nil
-}
-
-func getTenorDateCCYCROSS(tenor Tenor, tradeDate time.Time, ccy1 string, via string, ccy2 string) (time.Time, error) {
-	// Calculate the settlement days, and adjust the date based on the term string provided i.e. 1D, 1W, 1M, 1Y
-	return time.Now(), nil
 }
 
 func tenorToDuration(tenor Tenor) (time.Duration, error) {
