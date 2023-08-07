@@ -2,53 +2,53 @@ package mock
 
 import "fmt"
 
-type RateLadderInfo struct {
+type Rung struct {
 	Code        string
 	Name        string
 	Alternative string
 	Index       int
 }
 
-var RateLadderInfoMap map[string]RateLadderInfo
+var Ladder map[string]Rung
 
 func init() {
-	RateLadderInfoMap = make(map[string]RateLadderInfo)
-	RateLadderInfoMap["ON"] = RateLadderInfo{Code: "ON", Name: "Overnight", Index: 1}
-	RateLadderInfoMap["TD"] = RateLadderInfo{Code: "TD", Name: "Today", Index: 2}
-	RateLadderInfoMap["TN"] = RateLadderInfo{Code: "TN", Name: "Tom/Next", Index: 3}
-	RateLadderInfoMap["SP"] = RateLadderInfo{Code: "SP", Name: "Spot", Index: 4}
-	RateLadderInfoMap["1W"] = RateLadderInfo{Code: "1W", Name: "1 Week", Alternative: "7D", Index: 5}
-	RateLadderInfoMap["2W"] = RateLadderInfo{Code: "2W", Name: "2 Weeks", Index: 6}
-	RateLadderInfoMap["3W"] = RateLadderInfo{Code: "3W", Name: "3 Weeks", Index: 7}
-	RateLadderInfoMap["1M"] = RateLadderInfo{Code: "1M", Name: "1 Month", Alternative: "30D", Index: 8}
-	RateLadderInfoMap["2M"] = RateLadderInfo{Code: "2M", Name: "2 Months", Index: 9}
-	RateLadderInfoMap["3M"] = RateLadderInfo{Code: "3M", Name: "3 Months", Alternative: "90D", Index: 10}
-	RateLadderInfoMap["4M"] = RateLadderInfo{Code: "4M", Name: "4 Months", Index: 11}
-	RateLadderInfoMap["5M"] = RateLadderInfo{Code: "5M", Name: "5 Months", Index: 12}
-	RateLadderInfoMap["6M"] = RateLadderInfo{Code: "6M", Name: "6 Months", Alternative: "180D", Index: 13}
-	RateLadderInfoMap["7M"] = RateLadderInfo{Code: "7M", Name: "7 Months", Index: 14}
-	RateLadderInfoMap["8M"] = RateLadderInfo{Code: "8M", Name: "8 Months", Index: 15}
-	RateLadderInfoMap["9M"] = RateLadderInfo{Code: "9M", Name: "9 Months", Index: 16}
-	RateLadderInfoMap["10M"] = RateLadderInfo{Code: "10M", Name: "10 Months", Index: 17}
-	RateLadderInfoMap["11M"] = RateLadderInfo{Code: "11M", Name: "11 Months", Index: 18}
-	RateLadderInfoMap["1Y"] = RateLadderInfo{Code: "1Y", Name: "1 Year", Alternative: "12M", Index: 19}
-	RateLadderInfoMap["15M"] = RateLadderInfo{Code: "15M", Name: "13 Months", Index: 20}
-	RateLadderInfoMap["18M"] = RateLadderInfo{Code: "18M", Name: "18 Months", Index: 21}
-	RateLadderInfoMap["21M"] = RateLadderInfo{Code: "21M", Name: "21 Months", Index: 22}
-	RateLadderInfoMap["2Y"] = RateLadderInfo{Code: "2Y", Name: "2 Years", Index: 23}
-	RateLadderInfoMap["3Y"] = RateLadderInfo{Code: "3Y", Name: "3 Years", Index: 24}
-	RateLadderInfoMap["4Y"] = RateLadderInfo{Code: "4Y", Name: "4 Years", Index: 25}
-	RateLadderInfoMap["5Y"] = RateLadderInfo{Code: "5Y", Name: "5 Years", Index: 26}
-	RateLadderInfoMap["6Y"] = RateLadderInfo{Code: "6Y", Name: "6 Years", Index: 27}
-	RateLadderInfoMap["7Y"] = RateLadderInfo{Code: "7Y", Name: "7 Years", Index: 28}
-	RateLadderInfoMap["8Y"] = RateLadderInfo{Code: "8Y", Name: "8 Years", Index: 29}
-	RateLadderInfoMap["9Y"] = RateLadderInfo{Code: "9Y", Name: "9 Years", Index: 30}
-	RateLadderInfoMap["10Y"] = RateLadderInfo{Code: "10Y", Name: "10 Years", Index: 31}
+	Ladder = make(map[string]Rung)
+	Ladder["ON"] = Rung{Code: "ON", Name: "Overnight", Index: 1}
+	Ladder["TD"] = Rung{Code: "TD", Name: "Today", Index: 2}
+	Ladder["TN"] = Rung{Code: "TN", Name: "Tom/Next", Index: 3}
+	Ladder["SP"] = Rung{Code: "SP", Name: "Spot", Index: 4}
+	Ladder["1W"] = Rung{Code: "1W", Name: "1 Week", Alternative: "7D", Index: 5}
+	Ladder["2W"] = Rung{Code: "2W", Name: "2 Weeks", Index: 6}
+	Ladder["3W"] = Rung{Code: "3W", Name: "3 Weeks", Index: 7}
+	Ladder["1M"] = Rung{Code: "1M", Name: "1 Month", Alternative: "30D", Index: 8}
+	Ladder["2M"] = Rung{Code: "2M", Name: "2 Months", Index: 9}
+	Ladder["3M"] = Rung{Code: "3M", Name: "3 Months", Alternative: "90D", Index: 10}
+	Ladder["4M"] = Rung{Code: "4M", Name: "4 Months", Index: 11}
+	Ladder["5M"] = Rung{Code: "5M", Name: "5 Months", Index: 12}
+	Ladder["6M"] = Rung{Code: "6M", Name: "6 Months", Alternative: "180D", Index: 13}
+	Ladder["7M"] = Rung{Code: "7M", Name: "7 Months", Index: 14}
+	Ladder["8M"] = Rung{Code: "8M", Name: "8 Months", Index: 15}
+	Ladder["9M"] = Rung{Code: "9M", Name: "9 Months", Index: 16}
+	Ladder["10M"] = Rung{Code: "10M", Name: "10 Months", Index: 17}
+	Ladder["11M"] = Rung{Code: "11M", Name: "11 Months", Index: 18}
+	Ladder["1Y"] = Rung{Code: "1Y", Name: "1 Year", Alternative: "12M", Index: 19}
+	Ladder["15M"] = Rung{Code: "15M", Name: "13 Months", Index: 20}
+	Ladder["18M"] = Rung{Code: "18M", Name: "18 Months", Index: 21}
+	Ladder["21M"] = Rung{Code: "21M", Name: "21 Months", Index: 22}
+	Ladder["2Y"] = Rung{Code: "2Y", Name: "2 Years", Index: 23}
+	Ladder["3Y"] = Rung{Code: "3Y", Name: "3 Years", Index: 24}
+	Ladder["4Y"] = Rung{Code: "4Y", Name: "4 Years", Index: 25}
+	Ladder["5Y"] = Rung{Code: "5Y", Name: "5 Years", Index: 26}
+	Ladder["6Y"] = Rung{Code: "6Y", Name: "6 Years", Index: 27}
+	Ladder["7Y"] = Rung{Code: "7Y", Name: "7 Years", Index: 28}
+	Ladder["8Y"] = Rung{Code: "8Y", Name: "8 Years", Index: 29}
+	Ladder["9Y"] = Rung{Code: "9Y", Name: "9 Years", Index: 30}
+	Ladder["10Y"] = Rung{Code: "10Y", Name: "10 Years", Index: 31}
 }
 
 func GetRateLadderList() []string {
 	rtn := []string{}
-	for k := range RateLadderInfoMap {
+	for k := range Ladder {
 		rtn = append(rtn, k)
 	}
 	//rtn.sort()
@@ -56,21 +56,21 @@ func GetRateLadderList() []string {
 }
 
 func IsValidPeriod(in string) bool {
-	_, ok := RateLadderInfoMap[in]
+	_, ok := Ladder[in]
 	return ok
 }
 
-func GetRateLadderByIndex(index int) RateLadderInfo {
-	for _, v := range RateLadderInfoMap {
+func GetRateLadderByIndex(index int) Rung {
+	for _, v := range Ladder {
 		if v.Index == index {
 			return v
 		}
 	}
-	return RateLadderInfo{}
+	return Rung{}
 }
 
 func test() bool {
-	noitems := len(RateLadderInfoMap)
+	noitems := len(Ladder)
 	for i := 1; i <= noitems; i++ {
 		rli := GetRateLadderByIndex(i)
 		fmt.Printf("rate ladder info: %v\n", rli)
@@ -78,10 +78,10 @@ func test() bool {
 	return true
 }
 
-func RateValueToString(R map[string]RateLadderInfo) string {
+func RateValueToString(R map[string]Rung) string {
 	output := ""
 	//	noItems := len(R)
-	noitems := len(RateLadderInfoMap)
+	noitems := len(Ladder)
 	for i := 1; i <= noitems; i++ {
 		rli := GetRateLadderByIndex(i)
 		// add to output
@@ -89,4 +89,8 @@ func RateValueToString(R map[string]RateLadderInfo) string {
 	}
 
 	return output
+}
+
+func GetTenorInfo(tenor string) (Rung, error) {
+	return Ladder[tenor], nil
 }

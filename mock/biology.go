@@ -1,34 +1,34 @@
 package mock
 
-// BiologyInfo represents information of an indivual biology.
-type BiologyInfo struct {
+// BiologicalSex represents information of an indivual biology.
+type BiologicalSex struct {
 	Name        string
 	Description string
 }
 
-var BiologyInfoMap map[string]BiologyInfo
+var BiologicalSexes map[string]BiologicalSex
 
 func init() {
-	BiologyInfoMap = make(map[string]BiologyInfo)
-	BiologyInfoMap["M"] = BiologyInfo{Name: "Male", Description: ""}
-	BiologyInfoMap["F"] = BiologyInfo{Name: "Female", Description: ""}
-	BiologyInfoMap["I"] = BiologyInfo{Name: "Intersex", Description: ""}
-	BiologyInfoMap["O"] = BiologyInfo{Name: "Other", Description: ""}
+	BiologicalSexes = make(map[string]BiologicalSex)
+	BiologicalSexes["M"] = BiologicalSex{Name: "Male", Description: ""}
+	BiologicalSexes["F"] = BiologicalSex{Name: "Female", Description: ""}
+	BiologicalSexes["I"] = BiologicalSex{Name: "Intersex", Description: ""}
+	BiologicalSexes["O"] = BiologicalSex{Name: "Other", Description: ""}
 }
 
 func GetBiologyList() []string {
 	rtn := []string{}
-	for k := range BiologyInfoMap {
+	for k := range BiologicalSexes {
 		rtn = append(rtn, k)
 	}
 	return rtn
 }
 
-func GetBiologyInfo(biology string) BiologyInfo {
-	return BiologyInfoMap[biology]
+func GetBiologyInfo(biology string) BiologicalSex {
+	return BiologicalSexes[biology]
 }
 
 func IsValidBiology(biology string) bool {
-	_, ok := BiologyInfoMap[biology]
+	_, ok := BiologicalSexes[biology]
 	return ok
 }

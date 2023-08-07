@@ -44,45 +44,6 @@ func Test_validateAndFormatTerm(t *testing.T) {
 	}
 }
 
-func Test_getTenorDateCCY(t *testing.T) {
-	type args struct {
-		tenor     Tenor
-		tradeDate time.Time
-		ccy       string
-	}
-	TSP, _ := NewTenor("SP")
-	TTD, _ := NewTenor("TD")
-	T1M, _ := NewTenor("1M")
-
-	tests := []struct {
-		name    string
-		args    args
-		want    time.Time
-		wantErr bool
-	}{
-		// TODO: Add test cases.
-
-		{"SPUSD", args{TSP, time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), "USD"}, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), false},
-		{"SPEUR", args{TSP, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), "EUR"}, time.Date(2019, 1, 4, 0, 0, 0, 0, time.UTC), false},
-		{"TDEUR", args{TTD, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), "EUR"}, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), false},
-		{"1MGBP", args{T1M, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), "GBP"}, time.Date(2019, 2, 3, 0, 0, 0, 0, time.UTC), false},
-		{"SPMXN", args{TSP, time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), "MXN"}, time.Date(2019, 1, 5, 0, 0, 0, 0, time.UTC), false},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, err := getTenorDateCCY(tt.args.tenor, tt.args.tradeDate, tt.args.ccy)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("getTenorDateCCY() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("getTenorDateCCY() = %v, want %v", got, tt.want)
-			}
-			t.Logf("getTenorDateCCY() = %v, want %v", got, tt.want)
-		})
-	}
-}
-
 func Test_getLadder(t *testing.T) {
 	type args struct {
 		ccy       string

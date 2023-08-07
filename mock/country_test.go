@@ -12,13 +12,13 @@ func TestGetCountryInfo(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    CountryInfo
+		want    Country
 		wantErr bool
 	}{
 		// TODO: Add test cases.
-		{"Valid Country Code", args{"DE"}, CountryInfo{IBANLength: 22, Currency: "EUR", ISOCode: "DE", ISOCode3: "DEU"}, false},
-		{"Invalid Country Code", args{"XX"}, CountryInfo{}, true},
-		{"Valid Country Code", args{"DEU"}, CountryInfo{IBANLength: 22, Currency: "EUR", ISOCode: "DE", ISOCode3: "DEU"}, false},
+		{"Valid Country Code", args{"DE"}, Country{IBANLength: 22, Currency: "EUR", ISOCode: "DE", ISOCode3: "DEU"}, false},
+		{"Invalid Country Code", args{"XX"}, Country{}, true},
+		{"Valid Country Code", args{"DEU"}, Country{IBANLength: 22, Currency: "EUR", ISOCode: "DE", ISOCode3: "DEU"}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

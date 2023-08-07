@@ -5,38 +5,38 @@ import (
 	"log"
 )
 
-// CountryInfo represents information about the IBAN format for a specific country.
-type CountryInfo struct {
+// Country represents information about the IBAN format for a specific country.
+type Country struct {
 	IBANLength int    // The expected length of the IBAN for the country.
 	Currency   string // The currency code for the country.
 	ISOCode    string // The ISO country code
 	ISOCode3   string // The ISO country code
 }
 
-var CountryInfoMap map[string]CountryInfo
+var Countries map[string]Country
 
 func init() {
 	fmt.Println("mock init")
-	CountryInfoMap = make(map[string]CountryInfo)
-	CountryInfoMap["DE"] = CountryInfo{IBANLength: 22, Currency: "EUR", ISOCode: "DE", ISOCode3: "DEU"}
-	CountryInfoMap["US"] = CountryInfo{IBANLength: 18, Currency: "USD", ISOCode: "US", ISOCode3: "USA"}
-	CountryInfoMap["GB"] = CountryInfo{IBANLength: 22, Currency: "GBP", ISOCode: "GB", ISOCode3: "GBR"}
-	CountryInfoMap["FR"] = CountryInfo{IBANLength: 27, Currency: "EUR", ISOCode: "FR", ISOCode3: "FRA"}
-	CountryInfoMap["ES"] = CountryInfo{IBANLength: 24, Currency: "EUR", ISOCode: "ES", ISOCode3: "ESP"}
-	CountryInfoMap["IT"] = CountryInfo{IBANLength: 27, Currency: "EUR", ISOCode: "IT", ISOCode3: "ITA"}
-	CountryInfoMap["NL"] = CountryInfo{IBANLength: 18, Currency: "EUR", ISOCode: "NL", ISOCode3: "NLD"}
-	CountryInfoMap["ZA"] = CountryInfo{IBANLength: 20, Currency: "ZAR", ISOCode: "ZA", ISOCode3: "ZAF"}
+	Countries = make(map[string]Country)
+	Countries["DE"] = Country{IBANLength: 22, Currency: "EUR", ISOCode: "DE", ISOCode3: "DEU"}
+	Countries["US"] = Country{IBANLength: 18, Currency: "USD", ISOCode: "US", ISOCode3: "USA"}
+	Countries["GB"] = Country{IBANLength: 22, Currency: "GBP", ISOCode: "GB", ISOCode3: "GBR"}
+	Countries["FR"] = Country{IBANLength: 27, Currency: "EUR", ISOCode: "FR", ISOCode3: "FRA"}
+	Countries["ES"] = Country{IBANLength: 24, Currency: "EUR", ISOCode: "ES", ISOCode3: "ESP"}
+	Countries["IT"] = Country{IBANLength: 27, Currency: "EUR", ISOCode: "IT", ISOCode3: "ITA"}
+	Countries["NL"] = Country{IBANLength: 18, Currency: "EUR", ISOCode: "NL", ISOCode3: "NLD"}
+	Countries["ZA"] = Country{IBANLength: 20, Currency: "ZAR", ISOCode: "ZA", ISOCode3: "ZAF"}
 }
 
-func GetCountryInfo(countryCode string) (CountryInfo, error) {
+func GetCountryInfo(countryCode string) (Country, error) {
 
-	rtn := CountryInfo{}
+	rtn := Country{}
 	if len(countryCode) == 2 {
-		rtn = CountryInfoMap[countryCode]
+		rtn = Countries[countryCode]
 	}
 
 	if len(countryCode) == 3 {
-		for _, v := range CountryInfoMap {
+		for _, v := range Countries {
 			if v.ISOCode3 == countryCode {
 				rtn = v
 			}
@@ -45,7 +45,7 @@ func GetCountryInfo(countryCode string) (CountryInfo, error) {
 
 	if rtn.IBANLength == 0 {
 		log.Printf("[WARN] Invalid country code: [%s]", countryCode)
-		return CountryInfo{}, fmt.Errorf("invalid country code: [%s]", countryCode)
+		return Country{}, fmt.Errorf("invalid country code: [%s]", countryCode)
 	}
 	return rtn, nil
 }

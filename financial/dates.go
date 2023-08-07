@@ -65,46 +65,6 @@ func getTenorDateTEST(tenor Tenor, tradeDate time.Time, ccy ...xmock.Currency) (
 	return time.Now(), nil
 }
 
-func getTenorDateCCY(tenor Tenor, tradeDate time.Time, ccy string) (time.Time, error) {
-	// Calculate the settlement days, and adjust the date based on the term string provided i.e. 1D, 1W, 1M, 1Y
-
-	spotDays, spotError := getSettlementDaysCCY(ccy)
-	if spotError != nil {
-		return time.Now(), spotError
-	}
-
-	if !xmock.IsValidPeriod(tenor.String()) {
-		return time.Now(), fmt.Errorf("invalid tenor [%s]", tenor.String())
-	}
-
-	// Get ladder
-	//ladder := xmock.GetRateLadderList()
-	//fmt.Printf("ladder: %v\n", ladder)
-
-	if tenor.term == "SP" {
-		return adjustSettlementForWeekends(tradeDate.AddDate(0, 0, spotDays)), nil
-	}
-	if tenor.term == "ON" {
-		return adjustSettlementForWeekends(tradeDate.AddDate(0, 0, spotDays-1)), nil
-	}
-	if tenor.term == "TN" {
-		return adjustSettlementForWeekends(tradeDate.AddDate(0, 0, 1)), nil
-	}
-	if tenor.term == "TD" {
-		return adjustSettlementForWeekends(tradeDate), nil
-	}
-
-	dura, err := tenorToDuration(tenor)
-	if err != nil {
-		return time.Now(), err
-	}
-
-	rtn := tradeDate.AddDate(0, 0, spotDays)
-	rtn = adjustSettlementForWeekends(rtn.Add(dura))
-
-	return rtn, nil
-}
-
 func tenorToDuration(tenor Tenor) (time.Duration, error) {
 	term := tenor.String()
 	if len(term) < 2 {
@@ -135,7 +95,7 @@ func tenorToDuration(tenor Tenor) (time.Duration, error) {
 
 func getLadderCCY(pivotDate time.Time, ccy string) []Date {
 	var DateList []Date
-	rateLadder := xmock.RateLadderInfoMap
+	rateLadder := xmock.Ladder
 	xmock.RateValueToString(rateLadder)
 	fmt.Printf("rateLadder: %v\n", rateLadder)
 	fmt.Printf("ccy: %v\n", ccy)
@@ -146,7 +106,7 @@ func getLadderCCY(pivotDate time.Time, ccy string) []Date {
 		if err != nil {
 			fmt.Printf("Error [%v]\n", err)
 		}
-		date, err := getTenorDateCCY(thisTenor, pivotDate, ccy)
+		date, err := getTenorDate(thisTenor, pivotDate, ccy)
 		if err != nil {
 			fmt.Printf("Error [%v]\n", err)
 		}
