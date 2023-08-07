@@ -19,7 +19,13 @@ type Date struct {
 }
 
 func getTenorDate(tenor Tenor, tradeDate time.Time, ccy ...string) (time.Time, error) {
-	return time.Now(), nil
+	// Calculate the settlement days, and adjust the date based on the term string provided i.e. 1D, 1W, 1M, 1Y
+	// loop thgouth currencies
+	fmt.Printf("No Currency Provided [%v]\n", len(ccy))
+	for _, c := range ccy {
+		fmt.Printf("ccy: %v\n", c)
+	}
+	return tradeDate, nil
 }
 
 func getTenorDateTEST(tenor Tenor, tradeDate time.Time, ccy ...xmock.Currency) (time.Time, error) {
