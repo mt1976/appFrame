@@ -8,7 +8,23 @@ import (
 	xmock "github.com/mt1976/appFrame/mock"
 )
 
-type Date struct {
+// The "FinDate" type represents a date with various properties and formats.
+// @property {string} Code - The "Code" property is a string that represents a code associated with the
+// date.
+// @property {string} Name - The "Name" property is a string that represents the name of the date.
+// @property FinDate - The "FinDate" property is of type "time.Time" and represents a specific date and time.
+// @property {int} Sort - The "Sort" property is an integer that is used to determine the order in
+// which the dates should be sorted. It can be used to sort the dates in ascending or descending order
+// based on this value.
+// @property {string} Simple - The "Simple" property is a string that represents the date in a
+// simplified format. It could be a formatted string that only includes the day, month, and year of the
+// date.
+// @property {string} External - The "External" property in the FinDate struct is a string that represents
+// an external reference or identifier related to the date.
+// @property {string} Human - The "Human" property in the "FinDate" struct represents the date in a
+// human-readable format. It is likely used to display the date to users in a more understandable way,
+// such as "January 1, 2022".
+type FinDate struct {
 	Code     string
 	Name     string
 	Date     time.Time
@@ -18,8 +34,13 @@ type Date struct {
 	Human    string
 }
 
-func getTenorDate(tenor Tenor, tradeDate time.Time, ccy ...string) (time.Time, error) {
+// The function `GetDateFromTenor` calculates the settlement date based on the given tenor, trade date, and
+// currency.
+func GetDateFromTenor(tenor Tenor, tradeDate time.Time, ccy ...string) (time.Time, error) {
 
+	if len(ccy) == 0 {
+		return time.Now(), fmt.Errorf("no currency provided")
+	}
 	fmt.Printf("Tenor [%v] Trade Date [%v] Ccys %v [%v]\n", tenor.String(), tradeDate.Format("2006-01-02"), ccy, len(ccy))
 
 	// Calculate the settlement days, and adjust the date based on the term string provided i.e. 1D, 1W, 1M, 1Y
@@ -61,10 +82,8 @@ func getTenorDate(tenor Tenor, tradeDate time.Time, ccy ...string) (time.Time, e
 	return rtn, nil
 }
 
-func getTenorDateTEST(tenor Tenor, tradeDate time.Time, ccy ...xmock.Currency) (time.Time, error) {
-	return time.Now(), nil
-}
-
+// The function `tenorToDuration` converts a financial tenor (e.g., "1D", "2W", "3M", "4Y") into a
+// corresponding time duration.
 func tenorToDuration(tenor Tenor) (time.Duration, error) {
 	term := tenor.String()
 	if len(term) < 2 {
@@ -93,8 +112,13 @@ func tenorToDuration(tenor Tenor) (time.Duration, error) {
 	}
 }
 
-func getLadderCCY(pivotDate time.Time, ccy string) []Date {
-	var DateList []Date
+// The function `GetLadder` takes a pivot date and a list of currency codes as input, and returns a
+// list of dates based on a rate ladder.
+func GetLadder(pivotDate time.Time, ccy ...string) []FinDate {
+	if len(ccy) == 0 {
+		return []FinDate{}
+	}
+	var DateList []FinDate
 	rateLadder := xmock.Ladder
 	xmock.RateValueToString(rateLadder)
 	fmt.Printf("rateLadder: %v\n", rateLadder)
@@ -106,12 +130,12 @@ func getLadderCCY(pivotDate time.Time, ccy string) []Date {
 		if err != nil {
 			fmt.Printf("Error [%v]\n", err)
 		}
-		date, err := getTenorDate(thisTenor, pivotDate, ccy)
+		date, err := GetDateFromTenor(thisTenor, pivotDate, ccy...)
 		if err != nil {
 			fmt.Printf("Error [%v]\n", err)
 		}
 		fmt.Printf("thisTenor: [%v] [%v] -> [%v]\n", ladder.Code, thisTenor.String(), date.Format("2006-01-02"))
-		di := Date{}
+		di := FinDate{}
 		di.Code = ladder.Code
 		di.Name = ladder.Name
 		di.Date = date
@@ -124,9 +148,49 @@ func getLadderCCY(pivotDate time.Time, ccy string) []Date {
 	return DateList
 }
 
-func getLadder(pivotdate time.Time, ccy ...string) []Date {
+func getLadderCCY(pivotdate time.Time, ccy ...string) []FinDate {
 	// TODO - this is a stub, please write logic
-	return nil
+	return GetLadder(pivotdate, ccy...)
+}
+
+// The function `GetTenorFromDate` takes a date and optional currency as input and returns the
+// corresponding tenor or an error.
+func GetTenorFromDate(inDate time.Time, ccy ...string) (Tenor, error) {
+	// TODO - TEST
+	// TEST
+
+	if len(ccy) == 0 {
+		return Tenor{}, fmt.Errorf("no currency provided")
+	}
+	// Get Spot for the currency
+	spotDate, err := GetDateFromTenor(Tenor{term: "SP"}, inDate, ccy...)
+	if err != nil {
+		return Tenor{}, err
+	}
+	// get list of tenors
+	tenorList := GetLadder(spotDate, ccy...)
+	// loop through tenors
+	for _, tenor := range tenorList {
+		if tenor.Date.Equal(inDate) {
+			rtn, err := NewTenor(tenor.Code)
+			if err != nil {
+				return Tenor{}, err
+			}
+			return rtn, nil
+		}
+		// Now check if the tenor date is greater than the input date but less than the next tenor date
+		// if so, return the tenor
+		if tenor.Date.Before(inDate) {
+			// get the previous tenor
+			previousTenor := tenorList[tenor.Sort-1]
+			rtn, err := NewTenor(previousTenor.Code)
+			if err != nil {
+				return Tenor{}, err
+			}
+			return rtn, nil
+		}
+	}
+	return Tenor{}, nil
 }
 
 func getTenorFromDateCCY(inDate, pivotDate time.Time, ccy string) (Tenor, error) {
@@ -140,11 +204,6 @@ func getTenorFromDateCCYPAIR(inDate, pivotDate time.Time, ccy1 string, ccy2 stri
 }
 
 func getTenorFromDateCCYCROSS(inDate, pivotDate time.Time, ccy1 string, via string, ccy2 string) (Tenor, error) {
-	// TODO - this is a stub, please write logic
-	return Tenor{}, nil
-}
-
-func getTenorFromDate(inDate, pivotDate time.Time, ccy ...string) (Tenor, error) {
 	// TODO - this is a stub, please write logic
 	return Tenor{}, nil
 }

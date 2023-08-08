@@ -58,7 +58,7 @@ func Test_getLadder(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dl := getLadderCCY(tt.args.pivotDate, tt.args.ccy)
+			dl := GetLadder(tt.args.pivotDate, tt.args.ccy)
 			t.Logf("getLadder() = %v", dl)
 		})
 	}
@@ -90,7 +90,7 @@ func Test_getTenorDate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := getTenorDate(tt.args.tenor, tt.args.tradeDate, tt.args.ccy...)
+			got, err := GetDateFromTenor(tt.args.tenor, tt.args.tradeDate, tt.args.ccy...)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("getTenorDate() error = %v, wantErr %v", err, tt.wantErr)
 				return
