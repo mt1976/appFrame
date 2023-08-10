@@ -1,10 +1,12 @@
 package translate
 
 import (
+	"fmt"
 	"strings"
 
 	xio "github.com/mt1976/appFrame/fileio"
 	xlogger "github.com/mt1976/appFrame/logs"
+	xstrings "github.com/mt1976/appFrame/strings"
 )
 
 // verbose is a flag to indicate verbose logging
@@ -32,13 +34,14 @@ func get(in string) string {
 	//out := str.LowerFirst(in) + "TODO"
 	out := in
 	if translationData[search] != "" {
-		out = translationData[search]
+		out = outFormat(translationData[search])
+
 	} else {
 
 		search2 := strings.ToLower(in)
 		search2 = strings.ReplaceAll(search2, " ", ".")
 		if translationData[search2] != "" {
-			out = translationData[search2]
+			out = outFormat(translationData[search2])
 		} else {
 
 			if verboseLogging() {
@@ -50,6 +53,29 @@ func get(in string) string {
 	}
 	//log.Info("TextGet: In :", in)
 	//log.Info("TextGet: Out :", out)
+	return out
+}
+
+func outFormat(in string) string {
+
+	fmt.Printf("in: %v\n", in)
+	out := in
+
+	out = strings.ReplaceAll(out, "\\n", "\n")
+	out = strings.ReplaceAll(out, "\\t", "\t")
+	out = strings.ReplaceAll(out, "\\r", "\r")
+	out = strings.ReplaceAll(out, "null", "")
+	out = xstrings.ReplaceWildcard(out, "null", "\n")
+	out = xstrings.ReplaceWildcard(out, "eq", "=")
+	out = xstrings.ReplaceWildcard(out, "gt", ">")
+	out = xstrings.ReplaceWildcard(out, "lt", "<")
+	out = xstrings.ReplaceWildcard(out, "amp", "&")
+	out = xstrings.ReplaceWildcard(out, "apos", "'")
+	out = xstrings.ReplaceWildcard(out, "quot", "\"")
+	out = xstrings.ReplaceWildcard(out, "nbsp", " ")
+	out = xstrings.ReplaceWildcard(out, "space", " ")
+	//out = xstrings.RemoveSpecialChars(out)
+	fmt.Printf("out: %v\n", out)
 	return out
 }
 
