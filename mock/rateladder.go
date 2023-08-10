@@ -69,6 +69,9 @@ func init() {
 	Ladder["8Y"] = Rung{Code: "8Y", Name: "8 Years", Index: idx.inc()}
 	Ladder["9Y"] = Rung{Code: "9Y", Name: "9 Years", Index: idx.inc()}
 	Ladder["10Y"] = Rung{Code: "10Y", Name: "10 Years", Index: idx.inc()}
+	Ladder["11Y"] = Rung{Code: "11Y", Name: "11 Years", Index: idx.inc()}
+	Ladder["12Y"] = Rung{Code: "12Y", Name: "12 Years", Index: idx.inc()}
+	Ladder["99Y"] = Rung{Code: "99Y", Name: "99 Years", Index: idx.inc()}
 	LadderSize = idx.inc()
 }
 

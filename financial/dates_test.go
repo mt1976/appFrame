@@ -102,6 +102,7 @@ func TestGetTenorFromDate(t *testing.T) {
 		{"1WUSDSP", args{time.Date(2019, 1, 7, 0, 0, 0, 0, time.UTC), time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"USD"}}, Tenor{"SP"}, false},
 		{"1WUSD", args{time.Date(2019, 1, 10, 0, 0, 0, 0, time.UTC), time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"USD"}}, Tenor{"1W"}, false},
 		{"TDEUR", args{time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"EUR"}}, Tenor{"TD"}, false},
+		{"10YUSD", args{time.Date(2033, 7, 19, 0, 0, 0, 0, time.UTC), time.Date(2023, 7, 8, 0, 0, 0, 0, time.UTC), []string{"USD"}}, Tenor{"10Y"}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
