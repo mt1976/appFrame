@@ -32,7 +32,7 @@ func (t *Tenor) String() string {
 func (t *Tenor) Set(term string) (*Tenor, error) {
 	newTenor, err := validateAndFormatTenor(term)
 	if err != nil {
-		xlogs.WithFields(logs.Fields{"error": err, "term": term}).Error("invalid tenor")
+		xlogs.WithFields(logs.Fields{"error": err, "term": term}).Warn("invalid tenor")
 		return nil, err
 	}
 	t.term = newTenor
@@ -44,7 +44,7 @@ func validateAndFormatTenor(tenor string) (string, error) {
 	// Validation is that the string is at least 2 characters long, and the last character is a valid unit
 	// i.e. D, W, M, Y
 	if len(tenor) < 2 {
-		xlogs.WithField("tenor", tenor).Error("invalid tenor - must be at least 2 characters long")
+		xlogs.WithField("tenor", tenor).Warnf("invalid tenor - must be at least 2 characters long")
 		return "", fmt.Errorf("invalid tenor [%s] must be at least 2 characters long", tenor)
 	}
 	unit := tenor[len(tenor)-1]

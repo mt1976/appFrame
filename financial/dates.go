@@ -40,12 +40,14 @@ type FinDate struct {
 func GetDateFromTenor(tenor Tenor, tradeDate time.Time, ccy ...string) (time.Time, error) {
 
 	if len(ccy) == 0 {
-		xlogs.Warn("no currency provided")
+		//xlogs.Warn("no currency provided")
+		xlogs.WithField("ccy(s)", ccy).Warn("no currency provided")
 		return time.Now(), fmt.Errorf("no currency provided")
 	}
 
 	if tenor.term == "" {
-		xlogs.Warn("no tenor provided")
+		//xlogs.Warn("no tenor provided")
+		xlogs.WithField("tenor", tenor.term).Warn("no tenor provided")
 		return time.Now(), fmt.Errorf("no tenor provided")
 	}
 
@@ -149,7 +151,7 @@ func GetLadder(pivotDate time.Time, ccy ...string) ([]FinDate, int, error) {
 	//fmt.Printf("pivotDate: %v\n", pivotDate.Format("2006-01-02"))
 	// range over the ladder
 
-	for i := 0; i < xmock.LadderSize; i++ {
+	for i := 1; i < xmock.LadderSize; i++ {
 		ladder := xmock.GetRateLadderByIndex(i)
 		//fmt.Printf("ladder[%v]: %v\n", i, ladder)
 		thisTenor, err := NewTenor(ladder.Code)
