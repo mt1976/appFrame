@@ -33,6 +33,8 @@ func Test_outFormat(t *testing.T) {
 		{"Eq", args{"{{eq}}"}, "="},
 		{"Gt", args{"{{gt}}"}, ">"},
 		{"Null", args{"null"}, ""},
+		{"{{Null}}", args{"{{null}}"}, ""},
+		{"amp", args{"{{amp}}"}, "&"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -1,7 +1,6 @@
 package translate
 
 import (
-	"fmt"
 	"strings"
 
 	xio "github.com/mt1976/appFrame/fileio"
@@ -58,14 +57,14 @@ func get(in string) string {
 
 func outFormat(in string) string {
 
-	fmt.Printf("in: %v\n", in)
+	//fmt.Printf("in: %v\n", in)
 	out := in
 
 	out = strings.ReplaceAll(out, "\\n", "\n")
 	out = strings.ReplaceAll(out, "\\t", "\t")
 	out = strings.ReplaceAll(out, "\\r", "\r")
+	out = xstrings.ReplaceWildcard(out, "null", "")
 	out = strings.ReplaceAll(out, "null", "")
-	out = xstrings.ReplaceWildcard(out, "null", "\n")
 	out = xstrings.ReplaceWildcard(out, "eq", "=")
 	out = xstrings.ReplaceWildcard(out, "gt", ">")
 	out = xstrings.ReplaceWildcard(out, "lt", "<")
@@ -75,7 +74,7 @@ func outFormat(in string) string {
 	out = xstrings.ReplaceWildcard(out, "nbsp", " ")
 	out = xstrings.ReplaceWildcard(out, "space", " ")
 	//out = xstrings.RemoveSpecialChars(out)
-	fmt.Printf("out: %v\n", out)
+	//fmt.Printf("out: %v\n", out)
 	return out
 }
 
