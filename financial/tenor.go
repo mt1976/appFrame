@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
+
+	"github.com/mt1976/appFrame/logs"
 )
 
 type Tenor struct {
@@ -30,6 +32,7 @@ func (t *Tenor) String() string {
 func (t *Tenor) Set(term string) (*Tenor, error) {
 	newTenor, err := validateAndFormatTenor(term)
 	if err != nil {
+		xlogs.WithFields(logs.Fields{"error": err, "term": term}).Error("invalid tenor")
 		return nil, err
 	}
 	t.term = newTenor
@@ -41,7 +44,8 @@ func validateAndFormatTenor(tenor string) (string, error) {
 	// Validation is that the string is at least 2 characters long, and the last character is a valid unit
 	// i.e. D, W, M, Y
 	if len(tenor) < 2 {
-		return "", fmt.Errorf("invalid tenor [%s]", tenor)
+		xlogs.WithField("tenor", tenor).Error("invalid tenor - must be at least 2 characters long")
+		return "", fmt.Errorf("invalid tenor [%s] must be at least 2 characters long", tenor)
 	}
 	unit := tenor[len(tenor)-1]
 	unit = byte(unicode.ToUpper(rune(unit)))
@@ -56,6 +60,7 @@ func validateAndFormatTenor(tenor string) (string, error) {
 
 	_, err := strconv.Atoi(factor)
 	if err != nil {
+		xlogs.WithFields(logs.Fields{"error": err, "factor": factor}).Error("invalid tenor - supplied value is not a number")
 		return "", fmt.Errorf("supplied value [%s] is not a number", factor)
 	}
 
@@ -71,6 +76,7 @@ func validateAndFormatTenor(tenor string) (string, error) {
 	case 'Y':
 		return clean, nil
 	default:
+		xlogs.WithFields(logs.Fields{"unit": unit}).Error("invalid tenor mnemonic")
 		return "", fmt.Errorf("invalid tenor mnemonic [%c]", unit)
 	}
 }

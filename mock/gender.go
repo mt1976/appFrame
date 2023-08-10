@@ -10,6 +10,7 @@ type Gender struct {
 var Genders map[string]Gender
 
 func init() {
+	report("Genders")
 	Genders = make(map[string]Gender)
 	Genders["Cis"] = Gender{Name: "Cisgender", Description: "Cisgender is a term to describe someone whose gender matches what they were assigned at birth."}
 	Genders["Trans"] = Gender{Name: "Transgender", Description: "Someone whose gender identity is different from the one they were assigned at birth might identify as transgender."}

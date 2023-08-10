@@ -34,7 +34,7 @@ var Currencies map[string]Currency
 
 func init() {
 
-	//fmt.Println("mock init")
+	report("Currencies")
 	Currencies = make(map[string]Currency)
 	Currencies["EUR"] = Currency{Code: "EUR", SpotDays: 2, Name: "Euro", Character: "€", DPS: 2, QuoteDPS: 4, Type: Fiat, MajorUnit: "Euro", MinorUnit: "Cent", ISONumericCode: "978", KnownAs: "Euros", MinorCharacter: "c", YearOfIntroduction: 1999}
 	Currencies["USD"] = Currency{Code: "USD", SpotDays: 1, Name: "US Dollar", Character: "$", DPS: 2, QuoteDPS: 4, Type: Fiat, MajorUnit: "Dollar", MinorUnit: "Cent", ISONumericCode: "840", KnownAs: "Bucks", MinorCharacter: "c", YearOfIntroduction: 1792}

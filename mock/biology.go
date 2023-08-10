@@ -9,6 +9,7 @@ type BiologicalSex struct {
 var BiologicalSexes map[string]BiologicalSex
 
 func init() {
+	report("BiologicalSexes")
 	BiologicalSexes = make(map[string]BiologicalSex)
 	BiologicalSexes["M"] = BiologicalSex{Name: "Male", Description: ""}
 	BiologicalSexes["F"] = BiologicalSex{Name: "Female", Description: ""}

@@ -44,26 +44,6 @@ func Test_validateAndFormatTerm(t *testing.T) {
 	}
 }
 
-func Test_getLadder(t *testing.T) {
-	type args struct {
-		ccy       string
-		pivotDate time.Time
-	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		{"USD", args{"USD", time.Date(2023, 4, 26, 0, 0, 0, 0, time.UTC)}},
-		{"GBP", args{"GBP", time.Date(2023, 4, 26, 0, 0, 0, 0, time.UTC)}},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			dl := GetLadder(tt.args.pivotDate, tt.args.ccy)
-			t.Logf("getLadder() = %v", dl)
-		})
-	}
-}
-
 func Test_getTenorDate(t *testing.T) {
 	type args struct {
 		tenor     Tenor
@@ -97,6 +77,73 @@ func Test_getTenorDate(t *testing.T) {
 			}
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("getTenorDate() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestGetTenorFromDate(t *testing.T) {
+	type args struct {
+		inDate   time.Time
+		baseDate time.Time
+		ccy      []string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    Tenor
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+		{"SPGBP", args{time.Date(2019, 1, 3, 0, 0, 0, 0, time.UTC), time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"GBP"}}, Tenor{"SP"}, false},
+		{"1WGBP", args{time.Date(2019, 1, 10, 0, 0, 0, 0, time.UTC), time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"GBP"}}, Tenor{"1W"}, false},
+		{"1WGBP", args{time.Date(2019, 1, 11, 0, 0, 0, 0, time.UTC), time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"GBP"}}, Tenor{"1W"}, false},
+		{"SPUSD", args{time.Date(2019, 1, 2, 0, 0, 0, 0, time.UTC), time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"USD"}}, Tenor{"SP"}, false},
+		{"1WUSDSP", args{time.Date(2019, 1, 7, 0, 0, 0, 0, time.UTC), time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"USD"}}, Tenor{"SP"}, false},
+		{"1WUSD", args{time.Date(2019, 1, 10, 0, 0, 0, 0, time.UTC), time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"USD"}}, Tenor{"1W"}, false},
+		{"TDEUR", args{time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC), []string{"EUR"}}, Tenor{"TD"}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := GetTenorFromDate(tt.args.inDate, tt.args.baseDate, tt.args.ccy...)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetTenorFromDate() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetTenorFromDate() = %v, want %v", got, tt.want)
+			}
+			t.Logf("TEST >>>> Want: %v, Got: %v, WantErr %v\n", tt.want, got, tt.wantErr)
+		})
+	}
+}
+
+func TestGetLadder(t *testing.T) {
+	type args struct {
+		pivotDate time.Time
+		ccy       []string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    []FinDate
+		want1   int
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, got1, err := GetLadder(tt.args.pivotDate, tt.args.ccy...)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetLadder() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetLadder() got = %v, want %v", got, tt.want)
+			}
+			if got1 != tt.want1 {
+				t.Errorf("GetLadder() got1 = %v, want %v", got1, tt.want1)
 			}
 		})
 	}

@@ -44,10 +44,12 @@ func getSettlementDaysPAIR(ccy1 string, ccy2 string) (int, error) {
 	// Validate the two currencues using the mock package
 	days1, err := getSettlementDaysCCY(ccy1)
 	if err != nil {
+		xlogs.WithFields(xlogger.Fields{"CCY": ccy1, "ERROR": err.Error()}).Warn("Settlement Days Issue")
 		return -1, err
 	}
 	days2, err := getSettlementDaysCCY(ccy2)
 	if err != nil {
+		xlogs.WithFields(xlogger.Fields{"CCY": ccy2, "ERROR": err.Error()}).Warn("Settlement Days Issue")
 		return -1, err
 	}
 
@@ -58,10 +60,12 @@ func getSettlementDaysPAIR(ccy1 string, ccy2 string) (int, error) {
 func getSettlementDaysCROSS(ccy1 string, via string, ccy2 string) (int, error) {
 	days1, err := getSettlementDaysPAIR(ccy1, via)
 	if err != nil {
+		xlogs.WithFields(xlogger.Fields{"CCY": ccy1, "ERROR": err.Error()}).Warn("Settlement Days Issue")
 		return -1, err
 	}
 	days2, err := getSettlementDaysPAIR(via, ccy2)
 	if err != nil {
+		xlogs.WithFields(xlogger.Fields{"CCY": ccy2, "ERROR": err.Error()}).Warn("Settlement Days Issue")
 		return -1, err
 	}
 
@@ -74,6 +78,7 @@ func getSettlementDateCCY(ccy1 string, tradeDate time.Time) (time.Time, error) {
 
 	days, err := getSettlementDaysCCY(ccy1)
 	if err != nil {
+		xlogs.WithFields(xlogger.Fields{"CCY": ccy1, "ERROR": err.Error()}).Warn("Settlement Days Issue")
 		return time.Now(), err
 	}
 
@@ -85,6 +90,7 @@ func getSettlementDatePAIR(ccy1 string, ccy2 string, tradeDate time.Time) (time.
 	// Calculate the settlement days
 	days, err := getSettlementDaysPAIR(ccy1, ccy2)
 	if err != nil {
+		xlogs.WithFields(xlogger.Fields{"CCY": ccy1, "ERROR": err.Error()}).Warn("Settlement Days Issue")
 		return time.Now(), err
 	}
 
@@ -96,6 +102,7 @@ func getSettlementDateCROSS(ccy1 string, via string, ccy2 string, tradeDate time
 	// Calculate the settlement days
 	days, err := getSettlementDaysCROSS(ccy1, via, ccy2)
 	if err != nil {
+		xlogs.WithFields(xlogger.Fields{"CCY": ccy1, "ERROR": err.Error()}).Warn("Settlement Days Issue")
 		return time.Now(), err
 	}
 

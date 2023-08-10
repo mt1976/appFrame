@@ -1,9 +1,5 @@
 package mock
 
-import (
-	"fmt"
-)
-
 // Title represents information of an indivual title.
 type Title struct {
 	Title string // The title
@@ -12,7 +8,7 @@ type Title struct {
 var Titles map[string]Title
 
 func init() {
-	fmt.Println("mock init")
+	report("Titles")
 	Titles = make(map[string]Title)
 	Titles["Mr"] = Title{Title: "Mr"}
 	Titles["Mrs"] = Title{Title: "Mrs"}

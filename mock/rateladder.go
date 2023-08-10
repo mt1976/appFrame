@@ -1,6 +1,11 @@
 package mock
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/mt1976/appFrame/logs"
+	xlogs "github.com/mt1976/appFrame/logs"
+)
 
 type Rung struct {
 	Code        string
@@ -9,41 +14,62 @@ type Rung struct {
 	Index       int
 }
 
+type Indexer struct {
+	Index int
+}
+
+func (i *Indexer) inc() int {
+	i.Index++
+	return i.Index
+}
+
 var Ladder map[string]Rung
+var LadderSize int
+var l xlogs.XLogger
 
 func init() {
+
+	l = logs.New()
+
+	report("Tenor Ladder")
+
 	Ladder = make(map[string]Rung)
-	Ladder["ON"] = Rung{Code: "ON", Name: "Overnight", Index: 1}
-	Ladder["TD"] = Rung{Code: "TD", Name: "Today", Index: 2}
-	Ladder["TN"] = Rung{Code: "TN", Name: "Tom/Next", Index: 3}
-	Ladder["SP"] = Rung{Code: "SP", Name: "Spot", Index: 4}
-	Ladder["1W"] = Rung{Code: "1W", Name: "1 Week", Alternative: "7D", Index: 5}
-	Ladder["2W"] = Rung{Code: "2W", Name: "2 Weeks", Index: 6}
-	Ladder["3W"] = Rung{Code: "3W", Name: "3 Weeks", Index: 7}
-	Ladder["1M"] = Rung{Code: "1M", Name: "1 Month", Alternative: "30D", Index: 8}
-	Ladder["2M"] = Rung{Code: "2M", Name: "2 Months", Index: 9}
-	Ladder["3M"] = Rung{Code: "3M", Name: "3 Months", Alternative: "90D", Index: 10}
-	Ladder["4M"] = Rung{Code: "4M", Name: "4 Months", Index: 11}
-	Ladder["5M"] = Rung{Code: "5M", Name: "5 Months", Index: 12}
-	Ladder["6M"] = Rung{Code: "6M", Name: "6 Months", Alternative: "180D", Index: 13}
-	Ladder["7M"] = Rung{Code: "7M", Name: "7 Months", Index: 14}
-	Ladder["8M"] = Rung{Code: "8M", Name: "8 Months", Index: 15}
-	Ladder["9M"] = Rung{Code: "9M", Name: "9 Months", Index: 16}
-	Ladder["10M"] = Rung{Code: "10M", Name: "10 Months", Index: 17}
-	Ladder["11M"] = Rung{Code: "11M", Name: "11 Months", Index: 18}
-	Ladder["1Y"] = Rung{Code: "1Y", Name: "1 Year", Alternative: "12M", Index: 19}
-	Ladder["15M"] = Rung{Code: "15M", Name: "13 Months", Index: 20}
-	Ladder["18M"] = Rung{Code: "18M", Name: "18 Months", Index: 21}
-	Ladder["21M"] = Rung{Code: "21M", Name: "21 Months", Index: 22}
-	Ladder["2Y"] = Rung{Code: "2Y", Name: "2 Years", Index: 23}
-	Ladder["3Y"] = Rung{Code: "3Y", Name: "3 Years", Index: 24}
-	Ladder["4Y"] = Rung{Code: "4Y", Name: "4 Years", Index: 25}
-	Ladder["5Y"] = Rung{Code: "5Y", Name: "5 Years", Index: 26}
-	Ladder["6Y"] = Rung{Code: "6Y", Name: "6 Years", Index: 27}
-	Ladder["7Y"] = Rung{Code: "7Y", Name: "7 Years", Index: 28}
-	Ladder["8Y"] = Rung{Code: "8Y", Name: "8 Years", Index: 29}
-	Ladder["9Y"] = Rung{Code: "9Y", Name: "9 Years", Index: 30}
-	Ladder["10Y"] = Rung{Code: "10Y", Name: "10 Years", Index: 31}
+
+	var idx Indexer
+
+	Ladder["TD"] = Rung{Code: "TD", Name: "Today", Index: idx.inc()}
+
+	Ladder["ON"] = Rung{Code: "ON", Name: "Overnight", Index: idx.inc()}
+	//Ladder["TN"] = Rung{Code: "TN", Name: "Tom/Next", Index: 3}
+	Ladder["SP"] = Rung{Code: "SP", Name: "Spot", Index: idx.inc()}
+	Ladder["1W"] = Rung{Code: "1W", Name: "1 Week", Alternative: "7D", Index: idx.inc()}
+	Ladder["2W"] = Rung{Code: "2W", Name: "2 Weeks", Index: idx.inc()}
+	Ladder["3W"] = Rung{Code: "3W", Name: "3 Weeks", Index: idx.inc()}
+	Ladder["1M"] = Rung{Code: "1M", Name: "1 Month", Alternative: "30D", Index: idx.inc()}
+	Ladder["2M"] = Rung{Code: "2M", Name: "2 Months", Index: idx.inc()}
+	Ladder["3M"] = Rung{Code: "3M", Name: "3 Months", Alternative: "90D", Index: idx.inc()}
+	Ladder["4M"] = Rung{Code: "4M", Name: "4 Months", Index: idx.inc()}
+	Ladder["5M"] = Rung{Code: "5M", Name: "5 Months", Index: idx.inc()}
+	Ladder["6M"] = Rung{Code: "6M", Name: "6 Months", Alternative: "180D", Index: idx.inc()}
+	Ladder["7M"] = Rung{Code: "7M", Name: "7 Months", Index: idx.inc()}
+	Ladder["8M"] = Rung{Code: "8M", Name: "8 Months", Index: idx.inc()}
+	Ladder["9M"] = Rung{Code: "9M", Name: "9 Months", Index: idx.inc()}
+	Ladder["10M"] = Rung{Code: "10M", Name: "10 Months", Index: idx.inc()}
+	Ladder["11M"] = Rung{Code: "11M", Name: "11 Months", Index: idx.inc()}
+	Ladder["1Y"] = Rung{Code: "1Y", Name: "1 Year", Alternative: "12M", Index: idx.inc()}
+	Ladder["15M"] = Rung{Code: "15M", Name: "13 Months", Index: idx.inc()}
+	Ladder["18M"] = Rung{Code: "18M", Name: "18 Months", Index: idx.inc()}
+	Ladder["21M"] = Rung{Code: "21M", Name: "21 Months", Index: idx.inc()}
+	Ladder["2Y"] = Rung{Code: "2Y", Name: "2 Years", Index: idx.inc()}
+	Ladder["3Y"] = Rung{Code: "3Y", Name: "3 Years", Index: idx.inc()}
+	Ladder["4Y"] = Rung{Code: "4Y", Name: "4 Years", Index: idx.inc()}
+	Ladder["5Y"] = Rung{Code: "5Y", Name: "5 Years", Index: idx.inc()}
+	Ladder["6Y"] = Rung{Code: "6Y", Name: "6 Years", Index: idx.inc()}
+	Ladder["7Y"] = Rung{Code: "7Y", Name: "7 Years", Index: idx.inc()}
+	Ladder["8Y"] = Rung{Code: "8Y", Name: "8 Years", Index: idx.inc()}
+	Ladder["9Y"] = Rung{Code: "9Y", Name: "9 Years", Index: idx.inc()}
+	Ladder["10Y"] = Rung{Code: "10Y", Name: "10 Years", Index: idx.inc()}
+	LadderSize = idx.inc()
 }
 
 func GetRateLadderList() []string {
@@ -73,12 +99,14 @@ func test() bool {
 	noitems := len(Ladder)
 	for i := 1; i <= noitems; i++ {
 		rli := GetRateLadderByIndex(i)
-		fmt.Printf("rate ladder info: %v\n", rli)
+		l.WithFields(xlogs.Fields{"rli": rli, "i": i}).Info("rate ladder info")
+
+		//	fmt.Printf("rate ladder info: %v\n", rli)
 	}
 	return true
 }
 
-func RateValueToString(R map[string]Rung) string {
+func LadderToString(R map[string]Rung) string {
 	output := ""
 	//	noItems := len(R)
 	noitems := len(Ladder)

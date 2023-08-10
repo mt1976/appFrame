@@ -16,7 +16,7 @@ type Country struct {
 var Countries map[string]Country
 
 func init() {
-	fmt.Println("mock init")
+	report("Countries")
 	Countries = make(map[string]Country)
 	Countries["DE"] = Country{IBANLength: 22, Currency: "EUR", ISOCode: "DE", ISOCode3: "DEU"}
 	Countries["US"] = Country{IBANLength: 18, Currency: "USD", ISOCode: "US", ISOCode3: "USA"}
