@@ -18,12 +18,13 @@ import (
 	"github.com/shirou/gopsutil/mem"
 )
 
-var xlogs xlogger.XLogger
+var l xlogger.XLogger
+var t *xtl.Translator
 
 func init() {
-
 	SYSINFO, _ = gInfo.GetInfo()
-	xlogs = xlogger.New()
+	l = xlogger.New()
+	t = xtl.New()
 }
 
 func get() SystemInfo {
@@ -53,8 +54,8 @@ func get() SystemInfo {
 	thisSystem.GPUInfo, _ = ghw.GPU()
 	//thisSystem.BIOSInfo, _ = ghw.BIOS()
 
-	xlogs.WithFields(xlogger.Fields{"User": thisSystem.UserName, "Home": thisSystem.UserHome, "Name": thisSystem.User}).Info(xtl.Get("user"))
-	xlogs.WithFields(xlogger.Fields{"Hostname": thisSystem.Hostname, "Uptime": thisSystem.Uptime, "CPU": thisSystem.CPU, "OS": thisSystem.OS, "Arch": thisSystem.Arch, "Kernel": thisSystem.Kernel, "Memory": thisSystem.Memory, "Network": thisSystem.Network, "Docker": thisSystem.Docker, "User": thisSystem.User, "GoVersion": thisSystem.GoVersion}).Info(xtl.Get("system"))
+	l.WithFields(xlogger.Fields{"User": thisSystem.UserName, "Home": thisSystem.UserHome, "Name": thisSystem.User}).Info(t.Get("user"))
+	l.WithFields(xlogger.Fields{"Hostname": thisSystem.Hostname, "Uptime": thisSystem.Uptime, "CPU": thisSystem.CPU, "OS": thisSystem.OS, "Arch": thisSystem.Arch, "Kernel": thisSystem.Kernel, "Memory": thisSystem.Memory, "Network": thisSystem.Network, "Docker": thisSystem.Docker, "User": thisSystem.User, "GoVersion": thisSystem.GoVersion}).Info(t.Get("system"))
 
 	//fmt.Printf("os.Environ(): %v\n", os.Environ())
 
@@ -65,7 +66,7 @@ func get() SystemInfo {
 func getUserHome() string {
 	usr, err := user.Current()
 	if err != nil {
-		xlogs.Fatal(err)
+		l.Fatal(err)
 	}
 	return usr.HomeDir
 }
@@ -73,7 +74,7 @@ func getUserHome() string {
 func getUser() string {
 	usr, err := user.Current()
 	if err != nil {
-		xlogs.Fatal(err)
+		l.Fatal(err)
 	}
 	return usr.Name
 }
@@ -120,7 +121,7 @@ func getArchInfo() string {
 func getDiskInfo() DiskInfo {
 	var thisDisk DiskInfo
 	thisDisk.Total, thisDisk.Free, thisDisk.Used = getDiskUsage()
-	xlogs.WithFields(xlogger.Fields{"Total": thisDisk.Total, "Free": thisDisk.Free, "Used": thisDisk.Used}).Info(xtl.Get("disk"))
+	l.WithFields(xlogger.Fields{"Total": thisDisk.Total, "Free": thisDisk.Free, "Used": thisDisk.Used}).Info(t.Get("disk"))
 	return thisDisk
 }
 
@@ -134,19 +135,19 @@ func getNetworkInfo() NetworkInfo {
 	thisNetwork.IP = getIP()
 	thisNetwork.MAC = getMAC()
 	thisNetwork.Name = getNetworkName()
-	xlogs.WithFields(xlogger.Fields{"IP": thisNetwork.IP, "MAC": thisNetwork.MAC, "Name": thisNetwork.Name}).Info(xtl.Get("network"))
+	l.WithFields(xlogger.Fields{"IP": thisNetwork.IP, "MAC": thisNetwork.MAC, "Name": thisNetwork.Name}).Info(t.Get("network"))
 	return thisNetwork
 }
 
 func getNetworkName() string {
-	thisNetworkName := "TBD"
+	thisNetworkName := t.Get("TBD")
 	return thisNetworkName
 }
 
 func getIP() string {
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {
-		xlogs.Fatal(err)
+		l.Fatal(err)
 	}
 	var ip string
 	for _, address := range addrs {
@@ -163,13 +164,13 @@ func getIP() string {
 func getMAC() string {
 	interfaces, err := net.Interfaces()
 	if err != nil {
-		xlogs.Fatal(err)
+		l.Fatal(err)
 	}
 	var mac string
 	for _, i := range interfaces {
 		addrs, err := i.Addrs()
 		if err != nil {
-			xlogs.Fatal(err)
+			l.Fatal(err)
 		}
 		for _, addr := range addrs {
 			var ip net.IP
@@ -198,7 +199,7 @@ func getMemoryInfo() MemoryInfo {
 	thisMemory.HumanFree = humanize.Bytes(thisMemory.Free)
 	thisMemory.HumanUsed = humanize.Bytes(thisMemory.Used)
 	thisMemory.HumanUsedPercent = fmt.Sprint(thisMemory.UsedPercent) + "%"
-	xlogs.WithFields(xlogger.Fields{"Total": thisMemory.HumanTotal, "Free": thisMemory.HumanFree, "Used": thisMemory.HumanUsed, "UsedPercent": thisMemory.HumanUsedPercent}).Info(xtl.Get("memory"))
+	l.WithFields(xlogger.Fields{"Total": thisMemory.HumanTotal, "Free": thisMemory.HumanFree, "Used": thisMemory.HumanUsed, "UsedPercent": thisMemory.HumanUsedPercent}).Info(t.Get("memory"))
 	return thisMemory
 }
 
@@ -209,7 +210,7 @@ func getMemoryTotal() uint64 {
 
 func getMemoryFree() uint64 {
 	v, _ := mem.VirtualMemory()
-	//xlogs.WithFields(xlogs.Fields{"Free": humanize.Bytes(v.Free), "Total": humanize.Bytes(v.Total)}).Info(xtl.Get("memory"))
+	//xlogs.WithFields(xlogs.Fields{"Free": humanize.Bytes(v.Free), "Total": humanize.Bytes(v.Total)}).Info(t.Get("memory"))
 	return v.Free
 }
 
@@ -217,14 +218,14 @@ func getCPUInfo() CPUInfo {
 	var thisCPU CPUInfo
 	thisCPU.NoCPUs = runtime.NumCPU()
 	thisCPU.CPUs = strconv.Itoa(thisCPU.NoCPUs)
-	//xlogs.WithFields(xlogs.Fields{"CPUs": thisCPU.NoCPUs, "Info": thisCPU.CPUs}).Info(xtl.Get("cpu"))
+	//xlogs.WithFields(xlogs.Fields{"CPUs": thisCPU.NoCPUs, "Info": thisCPU.CPUs}).Info(t.Get("cpu"))
 	return thisCPU
 }
 
 func getUptime() string {
 	uptime, err := host.Uptime()
 	if err != nil {
-		xlogs.Error("error getting uptime: ", err)
+		l.Error("error getting uptime: ", err)
 	}
 	upString, _ := time.ParseDuration(strconv.Itoa(int(uptime)) + "s")
 	//xlogs.WithField("uptime", upString).Debug("uptime")

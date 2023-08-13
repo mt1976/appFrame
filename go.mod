@@ -12,18 +12,11 @@ require (
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/viper v1.16.0
+	github.com/trisacrypto/lei v1.0.0
 	github.com/x-cray/logrus-prefixed-formatter v0.5.2
 )
 
-require (
-	github.com/bradfitz/slice v0.0.0-20180809154707-2b758aa73013 // indirect
-	github.com/google/go-cmp v0.5.9 // indirect
-	github.com/nxadm/tail v1.4.8 // indirect
-	github.com/trisacrypto/lei v1.0.0 // indirect
-	go4.org v0.0.0-20230225012048-214862532bf5 // indirect
-	golang.org/x/net v0.12.0 // indirect
-	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
-)
+require golang.org/x/exp v0.0.0-20230811145659-89c5cff77bcb // indirect
 
 require (
 	github.com/StackExchange/wmi v1.2.1 // indirect
@@ -45,7 +38,6 @@ require (
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d // indirect
 	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/onsi/gomega v1.27.10 // indirect
-	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.9 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect

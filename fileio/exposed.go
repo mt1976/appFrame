@@ -130,14 +130,38 @@ func Empty(dir string) error {
 func GetPropertiesFile(fileName string) (map[string]string, error) {
 	theseProperties := make(map[string]string)
 	//machineName, _ := os.Hostname()
-	// For docker - if can't find properties file (create one from the template properties file)
-	propertiesFileName := "config/" + fileName
+	//TODO For docker - if can't find properties file (create one from the template properties file)
+	//propertiesFileName := "config/" + fileName
 
-	xlogs.WithFields(xlogger.Fields{"File": fileName, "Path": propertiesFileName}).Info("Properties")
+	xlogs.WithFields(xlogger.Fields{"File": fileName}).Info("Properties")
 
-	err := cfg.Load(propertiesFileName, theseProperties)
+	err := cfg.Load(fileName, theseProperties)
 	if err != nil {
-		xlogs.Fatal("cannot access properties file "+propertiesFileName, err)
+		//xlogs.Fatal("cannot access properties file ["+propertiesFileName+"]", err)
+		xlogs.WithFields(xlogger.Fields{"File": fileName, "Error": err.Error()}).Fatal("cannot access properties file")
 	}
 	return theseProperties, nil
+}
+
+func GetPropertiesPayload(fileName, extension, path string) (map[string]string, error) {
+
+	xlogs.WithFields(xlogger.Fields{"File": fileName, "Path": path, "ext": extension}).Info("Properties X")
+
+	if extension == "" {
+		extension = "properties"
+	}
+
+	if fileName == "" {
+		fileName = "system"
+	}
+
+	fileName = fileName + "." + extension
+
+	propertiesFileName := "config" + string(os.PathSeparator) + fileName
+
+	if len(path) != 0 {
+		propertiesFileName = path + string(os.PathSeparator) + "config" + string(os.PathSeparator) + fileName
+	}
+
+	return GetPropertiesFile(propertiesFileName)
 }

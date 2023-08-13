@@ -32,12 +32,14 @@ type environment struct {
 }
 
 var xlogs xlogger.XLogger
+var t *xtl.Translator
 
 // PATH: application\environment.go
 // Language: go
 
 func init() {
 	xlogs = xlogger.New()
+	t = xtl.New()
 	Refresh()
 }
 
@@ -160,13 +162,13 @@ func refresh() {
 }
 
 func debug() {
-	xlogs.WithFields(xlogger.Fields{"NAME": Name(), "VERSION": Version()}).Info(xtl.Get("Application"))
-	xlogs.WithFields(xlogger.Fields{"URI": DockerURI(), "PORT": DockerPort(), "PROTOCOL": DockerProtocol()}).Info(xtl.Get("Container"))
-	xlogs.WithFields(xlogger.Fields{"URI": URI(), "PORT": Port(), "PROTOCOL": Protocol()}).Info(xtl.Get("Application"))
+	xlogs.WithFields(xlogger.Fields{"NAME": Name(), "VERSION": Version()}).Info(t.Get("Application"))
+	xlogs.WithFields(xlogger.Fields{"URI": DockerURI(), "PORT": DockerPort(), "PROTOCOL": DockerProtocol()}).Info(t.Get("Container"))
+	xlogs.WithFields(xlogger.Fields{"URI": URI(), "PORT": Port(), "PROTOCOL": Protocol()}).Info(t.Get("Application"))
 	if xsys.IsRunningInDockerContainer() {
-		xlogs.WithFields(xlogger.Fields{"DOCKER": "true"}).Info(xtl.Get("Runtime"))
+		xlogs.WithFields(xlogger.Fields{"DOCKER": "true"}).Info(t.Get("Runtime"))
 	} else {
-		xlogs.WithFields(xlogger.Fields{"DOCKER": "false"}).Info(xtl.Get("Runtime"))
+		xlogs.WithFields(xlogger.Fields{"DOCKER": "false"}).Info(t.Get("Runtime"))
 
 	}
 }
