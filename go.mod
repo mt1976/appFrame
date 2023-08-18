@@ -16,7 +16,10 @@ require (
 	github.com/x-cray/logrus-prefixed-formatter v0.5.2
 )
 
-require golang.org/x/exp v0.0.0-20230811145659-89c5cff77bcb // indirect
+require (
+	github.com/davecgh/go-spew v1.1.1 // indirect
+	golang.org/x/exp v0.0.0-20230811145659-89c5cff77bcb // indirect
+)
 
 require (
 	github.com/StackExchange/wmi v1.2.1 // indirect

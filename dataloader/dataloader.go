@@ -91,7 +91,7 @@ func (P *Payload) getRawContent(in string, kind string) string {
 	}
 
 	search := strings.ToLower(setSearch(in, kind))
-	search = strings.ReplaceAll(search, " ", "")
+	search = strings.ReplaceAll(search, " ", ".")
 	//out := str.LowerFirst(in) + "TODO"
 	out := in
 	if P.data[search] != "" {

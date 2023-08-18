@@ -90,8 +90,14 @@ func (l *XLogger) setOutput(name string, both bool) *XLogger {
 }
 
 func (l *XLogger) setPath(path string) *XLogger {
+
 	if path == "" {
-		path = "./"
+		pwd, err := os.Getwd()
+		if err != nil {
+			l.Fatal(err)
+			pwd = "./"
+		}
+		path = pwd
 	}
 	l.path = path
 	l.log.WithField("path", path).Info("Logging path set")
