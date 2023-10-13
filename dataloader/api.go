@@ -167,3 +167,11 @@ func (P *Payload) Debug() {
 func (P *Payload) GetLocalised(property, locale string) string {
 	return P.getRawContent(property, locale)
 }
+
+func (P *Payload) ToString() string {
+	return P.toString()
+}
+
+func (P *Payload) Update(key string, value string) *Payload {
+	return P.update(key, value)
+}

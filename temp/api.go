@@ -14,7 +14,7 @@ import (
 type TempData struct {
 	name string
 	path string
-	Data xdl.Payload
+	Data *xdl.Payload
 }
 
 var PathSeparator string = string(os.PathSeparator)

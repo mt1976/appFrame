@@ -70,7 +70,7 @@ func Write(fileName string, path string, content string) (bool, error) {
 	message := []byte(content)
 	err := ioutil.WriteFile(filePath, message, 0644)
 	if err != nil {
-		xlogs.Fatal("Write Error", err)
+		xlogs.Fatal("Write Error : [", err, "]")
 		return false, err
 	}
 	return false, nil
@@ -145,7 +145,7 @@ func GetPropertiesFile(fileName string) (map[string]string, error) {
 
 func GetPropertiesPayload(fileName, extension, path string) (map[string]string, error) {
 
-	xlogs.WithFields(xlogger.Fields{"File": fileName, "Path": path, "ext": extension}).Info("Properties X")
+	xlogs.WithFields(xlogger.Fields{"FileName": fileName, "Path": path, "Extension": extension}).Info("Data File/Payload")
 
 	if extension == "" {
 		extension = "properties"
@@ -155,13 +155,18 @@ func GetPropertiesPayload(fileName, extension, path string) (map[string]string, 
 		fileName = "system"
 	}
 
+	if path == "" {
+		pwd, _ := os.Getwd()
+		path = pwd + string(os.PathSeparator) + "config"
+	}
+
 	fileName = fileName + "." + extension
 
-	propertiesFileName := "config" + string(os.PathSeparator) + fileName
+	propertiesFileName := path + string(os.PathSeparator) + fileName
 
-	if len(path) != 0 {
-		propertiesFileName = path + string(os.PathSeparator) + "config" + string(os.PathSeparator) + fileName
-	}
+	//	if len(path) != 0 {
+	//		propertiesFileName = path + string(os.PathSeparator) + fileName
+	//	}
 
 	return GetPropertiesFile(propertiesFileName)
 }

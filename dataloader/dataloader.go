@@ -2,10 +2,12 @@ package dataloader
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
 
+	"github.com/davecgh/go-spew/spew"
 	xio "github.com/mt1976/appFrame/fileio"
 	xlogger "github.com/mt1976/appFrame/logs"
 	xstrings "github.com/mt1976/appFrame/strings"
@@ -162,7 +164,7 @@ func (P *Payload) setPath(path string) {
 
 // build the absolute path
 func (P *Payload) buildAbsolutePath() {
-	P.absolutepath = P.path + P.filename + "." + P.extension
+	P.absolutepath = P.path + string(os.PathSeparator) + P.filename + "." + P.extension
 }
 
 // verboseLogging returns the verbose flag
@@ -307,4 +309,31 @@ func (P *Payload) getMap(property string, category string) (map[string]string, e
 		rtn[strings.Split(v, ":")[0]] = strings.Split(v, ":")[1]
 	}
 	return rtn, nil
+}
+
+func (P *Payload) toString() string {
+	return mapToString(P.data)
+}
+
+func mapToString(inputMap map[string]string) string {
+
+	var keyValuePairs []string
+
+	for key, value := range inputMap {
+		keyValuePairs = append(keyValuePairs, fmt.Sprintf("%s=%s", key, value))
+	}
+
+	return strings.Join(keyValuePairs, "\r\n")
+}
+
+func (P *Payload) update(key string, value string) *Payload {
+
+	if P.data == nil {
+		P.data = make(map[string]string)
+	}
+	l.Info("Updating " + key + " to " + value)
+	spew.Dump(P)
+	P.data[key] = value
+	spew.Dump(P)
+	return P
 }
