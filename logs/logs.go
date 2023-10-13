@@ -35,7 +35,7 @@ func new() XLogger {
 
 	lr.SetFormatter(logformat.Formatter)
 	newlog.log = lr
-	newlog.path = basePath
+	newlog.path = basePath + string(os.PathSeparator) + "logs"
 	newlog.toDisk = false
 
 	return newlog
