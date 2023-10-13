@@ -74,6 +74,7 @@ func cleanInput(filename, extension, path string) (string, string, string) {
 	}
 	if path == "" {
 		// get current working directory
+		l.Warning("No path specified, using current working directory")
 		path, _ = os.Getwd()
 	}
 	return filename, extension, path
@@ -331,6 +332,8 @@ func (P *Payload) update(key string, value string) *Payload {
 	if P.data == nil {
 		P.data = make(map[string]string)
 	}
+	// lower the value in key
+	key = strings.ToLower(key)
 	l.Info("Updating " + key + " to " + value)
 	spew.Dump(P)
 	P.data[key] = value

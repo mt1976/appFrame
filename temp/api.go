@@ -12,12 +12,14 @@ import (
 // The package name is used to qualify identifiers defined in that package in the import namespace:
 
 type TempData struct {
-	name string
-	path string
-	Data *xdl.Payload
+	name   string
+	path   string
+	folder string
+	Data   *xdl.Payload
 }
 
 var PathSeparator string = string(os.PathSeparator)
+var DataPath string = string(os.PathSeparator) + "data"
 
 func init() {
 	// ...

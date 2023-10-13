@@ -34,7 +34,7 @@ func fetch(name string) (TempData, error) {
 	filename = name
 
 	storePath, err := os.Getwd()
-	storePath = storePath + PathSeparator + "temp"
+	storePath = storePath + PathSeparator + "data"
 	if err != nil {
 		return TempData{}, errors.New("unable to determine current working directory")
 	}
@@ -42,10 +42,10 @@ func fetch(name string) (TempData, error) {
 	if !folderExists(storePath) {
 		e := createFolder(storePath)
 		if e != nil {
-			return TempData{}, errors.New("no /temp folder exists, attempted to auto-create, please create one manually - [" + e.Error() + "]")
+			return TempData{}, errors.New("no /data folder exists, attempted to auto-create, please create one manually - [" + e.Error() + "]")
 		}
 		if !folderExists(storePath) {
-			return TempData{}, errors.New("no /temp folder exists, please create one")
+			return TempData{}, errors.New("no /data folder exists, please create one")
 		}
 	}
 
@@ -56,6 +56,7 @@ func fetch(name string) (TempData, error) {
 	ReturnData := TempData{}
 	ReturnData.name = filename
 	ReturnData.path = storePath
+	ReturnData.folder = DataPath
 	ReturnData.Data = xdl.New(filename, filetype, storePath)
 
 	spew.Dump(ReturnData)
@@ -91,9 +92,9 @@ func store(t TempData) error {
 	//store to t.name + time.Now().String() + "." + t.filetype
 	filename := t.name + "." + filetype
 
-	L.Info("Storing to " + filename + " in " + t.path)
-	xio.Touch(t.path + PathSeparator + filename)
-	xio.Write(filename, t.path, t.Data.ToString())
+	L.Info("Storing to " + filename + " in " + t.folder)
+	//xio.Touch(t.path + PathSeparator + filename)
+	xio.Write(filename, t.folder, t.Data.ToString())
 
 	return nil
 }

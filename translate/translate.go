@@ -24,7 +24,7 @@ func init() {
 
 func New() *Translator {
 	rtn := &Translator{}
-	rtn.translations = *xdata.New("translate", "dat", "")
+	rtn.translations = *xdata.New("translate", "dat", "/config")
 	rtn.locales = getLocales()
 	rtn.logger = xlogs.New()
 	return rtn
