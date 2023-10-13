@@ -66,6 +66,9 @@ func loadData(filename, extension, path string) map[string]string {
 }
 
 func cleanInput(filename, extension, path string) (string, string, string) {
+
+	fmt.Println("cleanInput: ", filename, extension, path)
+
 	if filename == "" {
 		filename = "system"
 	}
@@ -74,9 +77,16 @@ func cleanInput(filename, extension, path string) (string, string, string) {
 	}
 	if path == "" {
 		// get current working directory
-		l.Warning("No path specified, using current working directory")
-		path, _ = os.Getwd()
+		l.Info("No path specified, using current working directory")
+		err := error(nil)
+		path, err = os.Getwd()
+		if err != nil {
+			l.Fatal("Error getting current working directory: ", err)
+		}
+		path = path + string(os.PathSeparator) + "config"
 	}
+	fmt.Println("cleanInput: ", filename, extension, path)
+
 	return filename, extension, path
 }
 
