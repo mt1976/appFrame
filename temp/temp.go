@@ -7,7 +7,6 @@ import (
 	"os/user"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	xdl "github.com/mt1976/appFrame/dataloader"
 	xio "github.com/mt1976/appFrame/fileio"
 	xlg "github.com/mt1976/appFrame/logs"
@@ -19,7 +18,7 @@ var L xlg.XLogger
 
 func init() {
 	L = xlg.New()
-	L.ToFileAndConsole("tempdata")
+	L.ToFileAndConsole("data")
 	L.Start()
 }
 
@@ -59,7 +58,7 @@ func fetch(name string) (TempData, error) {
 	ReturnData.folder = DataPath
 	ReturnData.Data = xdl.New(filename, filetype, storePath)
 
-	spew.Dump(ReturnData)
+	//	spew.Dump(ReturnData)
 
 	return ReturnData, nil
 }
@@ -77,17 +76,17 @@ func store(t TempData) error {
 		return errors.New("unable to determine current hostname")
 	}
 
-	updateTime := time.Now().Format("20060102@150405")
+	updateTime := time.Now().Format(DATETIMEFORMAT)
 
 	t.Data.Update("updTimestamp", updateTime)
 	t.Data.Update("updUser", currentUser.Username)
 	t.Data.Update("updHost", hostname)
 
-	spew.Dump(t)
+	//spew.Dump(t)
 
 	//fullFullPath := t.path + PathSeparator + t.name + "." + filetype
 
-	fmt.Println(t.Data.ToString())
+	//fmt.Println(t.Data.ToString())
 
 	//store to t.name + time.Now().String() + "." + t.filetype
 	filename := t.name + "." + filetype

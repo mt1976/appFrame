@@ -7,6 +7,7 @@ import (
 	"unicode"
 	"unicode/utf8"
 
+	ascii "github.com/galsondor/go-ascii"
 	xlogger "github.com/mt1976/appFrame/logs"
 )
 
@@ -187,4 +188,19 @@ func decode(encodedStr string) string {
 	}
 
 	return string(decodedStr)
+}
+
+var cr = "{cr}"
+var lf = "{lf}"
+
+func makeStorable(in string) string {
+	s := strings.ReplaceAll(in, string(rune(ascii.CR)), cr)
+	s = strings.ReplaceAll(s, string(rune(ascii.LF)), lf)
+	return s
+}
+
+func makeDisplayable(in string) string {
+	s := strings.ReplaceAll(in, cr, string(rune(ascii.CR)))
+	s = strings.ReplaceAll(s, lf, string(rune(ascii.LF)))
+	return s
 }

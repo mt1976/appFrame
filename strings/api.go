@@ -115,3 +115,15 @@ func DParentheses(s string) string {
 func SParentheses(s string) string {
 	return sParentheses(s)
 }
+
+// The function "MakeStringStorable" takes a string as input and returns a storable version of the
+// string. Replaces ascii cr/lf with {{cr}}/{{lf}}.
+func MakeStringStorable(in string) string {
+	return makeStorable(in)
+}
+
+// The function "MakeStringDisplayable" takes a string as input and returns a modified version of the
+// string that is displayable. Replaces {{cr}}/{{lf}} with ascii cr/lf.
+func MakeStringDisplayable(in string) string {
+	return makeDisplayable(in)
+}

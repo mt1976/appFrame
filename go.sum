@@ -68,6 +68,8 @@ github.com/fsnotify/fsnotify v1.4.7/go.mod h1:jwhsz4b93w/PPRr/qN1Yymfu8t87LnFCMo
 github.com/fsnotify/fsnotify v1.4.9/go.mod h1:znqG4EE+3YCdAaPaxE2ZRY/06pZUdp0tY4IgpuI1SZQ=
 github.com/fsnotify/fsnotify v1.6.0 h1:n+5WquG0fcWoWp6xPWfHdbskMCQaFnG6PfBrh1Ky4HY=
 github.com/fsnotify/fsnotify v1.6.0/go.mod h1:sl3t1tCWJFWoRz9R8WJCbQihKKwmorjAbSClcnxKAGw=
+github.com/galsondor/go-ascii v0.0.0-20151210013816-e2eb5175fb10 h1:wg8EZEM/8jNk5KZhMVVEPq16M4CrrjMAYNsH3ZPjiac=
+github.com/galsondor/go-ascii v0.0.0-20151210013816-e2eb5175fb10/go.mod h1:TQf0oGo0I2KYcJfUbnOgrnHZrxhfVu6TW9z6q+k1I/M=
 github.com/gen2brain/beeep v0.0.0-20230602101333-f384c29b62dd h1:eVPIv7aXHQYJ5lbhXHoJyfPhivIn+BvH2xPoG62lT2w=
 github.com/gen2brain/beeep v0.0.0-20230602101333-f384c29b62dd/go.mod h1:0W7dI87PvXJ1Sjs0QPvWXKcQmNERY77e8l7GFhZB/s4=
 github.com/gen2brain/beeep v0.0.0-20230907135156-1a38885a97fc h1:NNgdMgPX3j33uEAoVVxNxillDPnxT0xbGv8uh4CKIAo=

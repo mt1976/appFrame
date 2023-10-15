@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/davecgh/go-spew/spew"
 	xio "github.com/mt1976/appFrame/fileio"
 	xlogger "github.com/mt1976/appFrame/logs"
 	xstrings "github.com/mt1976/appFrame/strings"
@@ -345,8 +344,8 @@ func (P *Payload) update(key string, value string) *Payload {
 	// lower the value in key
 	key = strings.ToLower(key)
 	l.Info("Updating " + key + " to " + value)
-	spew.Dump(P)
+	//spew.Dump(P)
 	P.data[key] = value
-	spew.Dump(P)
+	//spew.Dump(P)
 	return P
 }

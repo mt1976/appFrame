@@ -21,6 +21,8 @@ type TempData struct {
 var PathSeparator string = string(os.PathSeparator)
 var DataPath string = string(os.PathSeparator) + "data"
 
+const DATETIMEFORMAT = "20060102@150405"
+
 func init() {
 	// ...
 
